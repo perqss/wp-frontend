@@ -3,7 +3,9 @@ import LeftPanel from '../components/LeftPanel'
 
 const Main = () => {
   return (
-    <LeftPanel/>
+    <div style={{}}>
+      <LeftPanel/>
+    </div>
   );
 }
 

@@ -1,12 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { AgGridReact } from '@ag-grid-community/react';
+import React, { useEffect, useState, useRef } from 'react';
+import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-material.css';
-import { AllCommunityModules } from "@ag-grid-community/all-modules";
+import ItemInfo from './ItemInfo';
+
 
 const RightPanel = (props) => {
   const [data, setData] = useState([]);
+  const [isShown, setIsShown] = useState(false);
   const [columnDefs, setColumnDefs] = useState(props.columnDefs);
+  const gridRef = useRef<any>(null);
+  const [details, setDetails] = useState([]);
   const defaultColDef = {
     flex: 1,
     resizable: true,
@@ -24,20 +28,29 @@ const RightPanel = (props) => {
       .then(data => setData(data))
   }, [])
 
+  const onRowSelected = () => {
+    var selectedRows = gridRef.current.api.getSelectedRows();
+    setDetails(data[selectedRows[0].employeeID - 1]);
+    setIsShown(true);
+  };
+
   return (
-    <div>
+    <div style={{display: 'flex', flexDirection: 'row', width: '100vw'}}>
       {data && 
-      <div className='ag-theme-material' style={{ height: 400, width: 600 }}>
+      <div className='ag-theme-material' style={{flex: 4}}>
         <AgGridReact
-          modules={AllCommunityModules}
           className='data'
           domLayout='autoHeight'
           rowData={data}
           columnDefs={columnDefs}
           defaultColDef={defaultColDef}
+          rowSelection={'single'}
+          onRowSelected={onRowSelected}
+          ref={gridRef}
         />
       </div>  
       }
+      {isShown && <ItemInfo details={details}/>}
     </div>
   )
 }

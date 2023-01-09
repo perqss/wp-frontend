@@ -11,7 +11,6 @@ const LeftPanel = () => {
     const query = useRef();
     const columnDefs = useRef();
 
-
     return (
         <Box sx={{display: 'flex', flexDirection: 'row'}}>
             <Box sx={{ width: '100%', maxWidth: '15%', bgcolor: 'background.paper' }}>
