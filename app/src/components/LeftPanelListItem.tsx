@@ -16,12 +16,23 @@ const LeftPanelListItem = (props) => {
         setOpen(!open);
         props.setOpen(true);
         props.query.current = props.text.toLowerCase();
-        if (props.query.current === 'employees') {
-            props.columnDefs.current = [
+        console.log(props.query.current)
+
+        if (props.query.current === 'air readings') {
+            props.query.current = 'airReadings';
+            props.setColumnDefs([
+                {field: 'airReadingDate'},
+            ])
+        } else if (props.query.current === 'employees') {
+            props.setColumnDefs([
                 {field: 'firstName'},
                 {field: 'lastName'},
-                {field: 'departmentName'},
-            ]
+                {field: 'departmentName'}
+            ])
+        } else if (props.query.current === 'buildings') {
+            props.setColumnDefs([
+                {field: 'buildingName'}
+            ])
         }
     };
 

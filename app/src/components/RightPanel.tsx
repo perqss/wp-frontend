@@ -4,11 +4,10 @@ import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-material.css';
 import ItemInfo from './ItemInfo';
 
-
 const RightPanel = (props) => {
   const [data, setData] = useState([]);
   const [isShown, setIsShown] = useState(false);
-  const [columnDefs, setColumnDefs] = useState(props.columnDefs);
+  const [columnDefs, setColumnDefs] = useState();
   const gridRef = useRef<any>(null);
   const [details, setDetails] = useState([]);
   const defaultColDef = {
@@ -25,12 +24,16 @@ const RightPanel = (props) => {
   useEffect(() => {
       fetch(`${process.env.REACT_APP_URL}/${props.query}`)
       .then(result => result.json())
-      .then(data => setData(data))
-  }, [])
+      .then(data => {
+        setData(data);
+        setColumnDefs(props.columnDefs);
+        setIsShown(false);
+      })
+  }, [props.query]);
 
   const onRowSelected = () => {
     var selectedRows = gridRef.current.api.getSelectedRows();
-    setDetails(data[selectedRows[0].employeeID - 1]);
+    setDetails(selectedRows[0]);
     setIsShown(true);
   };
 
@@ -50,7 +53,7 @@ const RightPanel = (props) => {
         />
       </div>  
       }
-      {isShown && <ItemInfo details={details}/>}
+      {isShown && <ItemInfo details={details} query={props.query}/>}
     </div>
   )
 }
