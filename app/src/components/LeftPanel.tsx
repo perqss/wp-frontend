@@ -17,11 +17,11 @@ const LeftPanel = () => {
                     {items.map(item => {
                         if (item === 'Vehicles') {
                             return (
-                            <LeftPanelListItem text={item} open={open} setOpen={setOpen} query={query} columnDefs={columnDefs} setColumnDefs={setColumnDefs} expand/>
+                            <LeftPanelListItem key={item} text={item} open={open} setOpen={setOpen} query={query} columnDefs={columnDefs} setColumnDefs={setColumnDefs} expand/>
                             );
                         } else {
                             return (
-                            <LeftPanelListItem text={item} open={open} setOpen={setOpen} query={query} columnDefs={columnDefs} setColumnDefs={setColumnDefs}/>
+                            <LeftPanelListItem key={item} text={item} open={open} setOpen={setOpen} query={query} columnDefs={columnDefs} setColumnDefs={setColumnDefs}/>
                             );
                         }
                     })}

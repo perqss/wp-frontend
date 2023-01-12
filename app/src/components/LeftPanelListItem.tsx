@@ -16,7 +16,6 @@ const LeftPanelListItem = (props) => {
         setOpen(!open);
         props.setOpen(true);
         props.query.current = props.text.toLowerCase();
-        console.log(props.query.current)
 
         if (props.query.current === 'air readings') {
             props.query.current = 'airReadings';
@@ -33,13 +32,21 @@ const LeftPanelListItem = (props) => {
             props.setColumnDefs([
                 {field: 'buildingName'}
             ])
+        } else if (props.query.current === 'tickets') {
+            props.setColumnDefs([
+                {field: 'name'}
+            ])
+        } else if (props.query.current === 'stops') {
+            props.setColumnDefs([
+                {field: 'stopName'}
+            ])
         }
     };
 
     const renderVehicleTypes = () => (
         <List>
-            <NestedLeftPanelListItem text="Buses"/>
-            <NestedLeftPanelListItem text="Trams"/>
+            <NestedLeftPanelListItem text="Bus Lines"/>
+            <NestedLeftPanelListItem text="Tram Lines"/>
             <NestedLeftPanelListItem text="Special"/>
         </List>
     )

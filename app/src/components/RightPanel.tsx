@@ -22,13 +22,16 @@ const RightPanel = (props) => {
   };
 
   useEffect(() => {
+    if (props.query !== 'vehicles') {
       fetch(`${process.env.REACT_APP_URL}/${props.query}`)
       .then(result => result.json())
       .then(data => {
         setData(data);
         setColumnDefs(props.columnDefs);
         setIsShown(false);
+        
       })
+  }
   }, [props.query]);
 
   const onRowSelected = () => {

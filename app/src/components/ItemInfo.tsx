@@ -36,7 +36,8 @@ const ItemInfo = (props) => {
                 ]);
             })
         }
-      }, [props.details])
+      }, [props.details]);
+      console.log(props.details)
 
     return (
     <Box sx={{flex: 6, marginLeft: 10}}>
@@ -44,12 +45,12 @@ const ItemInfo = (props) => {
             Details
         </Typography>
         <Grid container spacing={3}>
-            {Object.keys(props.details).map(key =>
-            <Grid item key={key}>
-                <Paper elevation={1} key={key}>
-                    {key}: {props.details[key]}
-                </Paper>
-            </Grid>
+            {Object.keys(props.details).map(key => 
+                <Grid item key={key}>
+                    <Paper elevation={1} key={key}>
+                        {key}: {`${props.details[key]}`}
+                    </Paper>
+                </Grid>
             )}
         </Grid>
         {props.query === 'employees' ? 
