@@ -7,13 +7,30 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import Collapse from '@mui/material/Collapse';
 import List from '@mui/material/List';
-import NestedLeftPanelListItem from './NestedLeftPanelListItem';
+import { styled } from '@mui/material/styles';
+
+// const StyledListItemButton = styled(ListItemButton)({
+//     // selected and (selected + hover) states
+//     '&& .Mui-selected, && .Mui-selected:hover': {
+//       backgroundColor: 'red',
+//       '&, & .MuiListItemIcon-root': {
+//         color: 'pink',
+//       },
+//     },
+//     // hover states
+//     '& .MuiListItemButton-root:hover': {
+//       backgroundColor: 'orange',
+//       '&, & .MuiListItemIcon-root': {
+//         color: 'yellow',
+//       },
+//     },
+//   });
 
 const LeftPanelListItem = (props) => {
-    const [open, setOpen] = useState(false);
+    const LeftPanelColor = '#1976d2';
 
     const handleClickOpen = () => {
-        setOpen(!open);
+        props.setSelectedIndex(props.index);
         props.setOpen(true);
         props.query.current = props.text.toLowerCase();
 
@@ -40,28 +57,39 @@ const LeftPanelListItem = (props) => {
             props.setColumnDefs([
                 {field: 'stopName'}
             ])
+        } else if (props.query.current === 'bus lines') {
+            props.query.current = 'busLines';
+            props.setColumnDefs([
+                {field: 'lineId'}
+            ])
+        } else if (props.query.current === 'tram lines') {
+            props.query.current = 'tramLines';
+            props.setColumnDefs([
+                {field: 'lineId'}
+            ])
         }
     };
-
-    const renderVehicleTypes = () => (
-        <List>
-            <NestedLeftPanelListItem text="Bus Lines"/>
-            <NestedLeftPanelListItem text="Tram Lines"/>
-            <NestedLeftPanelListItem text="Special"/>
-        </List>
-    )
 
     return (
         <div>
             <ListItem disablePadding>
-                <ListItemButton onClick={handleClickOpen}>
+                <ListItemButton 
+                    onClick={handleClickOpen} 
+                    selected={props.selectedIndex === props.index}
+                    sx={{
+                        '&.Mui-selected': {
+                            backgroundColor: LeftPanelColor,
+                        },
+                        '&.Mui-selected:hover': {
+                            backgroundColor: LeftPanelColor,
+                        },
+                        ':hover': {
+                            backgroundColor: LeftPanelColor,
+                        }
+                    }}>
                     <ListItemText primary={props.text} primaryTypographyProps={{fontSize: 'large'}}/>
-                    {!props.expand ? '' : open ? <ExpandLess/> : <ExpandMore/>}
                 </ListItemButton>
             </ListItem>
-            <Collapse in={open} timeout='auto' unmountOnExit>
-                {props.text === 'Vehicles' ? renderVehicleTypes() : ''}
-            </Collapse>
         </div>
     );
 }

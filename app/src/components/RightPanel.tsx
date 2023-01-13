@@ -6,10 +6,11 @@ import ItemInfo from './ItemInfo';
 
 const RightPanel = (props) => {
   const [data, setData] = useState([]);
+  const [value, setValue] = useState(0);
   const [isShown, setIsShown] = useState(false);
   const [columnDefs, setColumnDefs] = useState();
   const gridRef = useRef<any>(null);
-  const [details, setDetails] = useState([]);
+  const [details, setDetails] = useState();
   const defaultColDef = {
     flex: 1,
     resizable: true,
@@ -21,6 +22,8 @@ const RightPanel = (props) => {
     autoHeaderHeight: true,
   };
 
+  console.log(isShown)
+
   useEffect(() => {
     if (props.query !== 'vehicles') {
       fetch(`${process.env.REACT_APP_URL}/${props.query}`)
@@ -29,10 +32,9 @@ const RightPanel = (props) => {
         setData(data);
         setColumnDefs(props.columnDefs);
         setIsShown(false);
-        
       })
   }
-  }, [props.query]);
+  }, [props.query, value]);
 
   const onRowSelected = () => {
     var selectedRows = gridRef.current.api.getSelectedRows();
@@ -56,7 +58,7 @@ const RightPanel = (props) => {
         />
       </div>  
       }
-      {isShown && <ItemInfo details={details} query={props.query}/>}
+      {isShown && <ItemInfo details={details} query={props.query} setIsShown={setIsShown} value={value} setValue={setValue}/>}
     </div>
   )
 }
