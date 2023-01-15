@@ -3,12 +3,14 @@ import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-material.css';
 import ItemInfo from './ItemInfo';
+import { Alert, Snackbar } from '@mui/material';
 
 const RightPanel = (props) => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<any>();
   const [value, setValue] = useState(0);
   const [isShown, setIsShown] = useState(false);
   const [columnDefs, setColumnDefs] = useState();
+  const [openSnackbar, setOpenSnackbar] = useState(false);
   const gridRef = useRef<any>(null);
   const [details, setDetails] = useState();
   const defaultColDef = {
@@ -22,14 +24,26 @@ const RightPanel = (props) => {
     autoHeaderHeight: true,
   };
 
-  console.log(isShown)
-
   useEffect(() => {
     if (props.query !== 'vehicles') {
       fetch(`${process.env.REACT_APP_URL}/${props.query}`)
       .then(result => result.json())
       .then(data => {
-        setData(data);
+        var dataSource = {
+          rowCount: null,
+          getRows: (params) => {
+            setTimeout(function () {
+              var rowsThisPage = data.slice(params.startRow, params.endRow);
+              var lastRow = -1;
+              if (data.length <= params.endRow) {
+                lastRow = data.length;
+              }
+              params.successCallback(rowsThisPage, lastRow);
+            }, 500);
+          },
+        };
+        
+        setData(dataSource)
         setColumnDefs(props.columnDefs);
         setIsShown(false);
       })
@@ -38,6 +52,7 @@ const RightPanel = (props) => {
 
   const onRowSelected = () => {
     var selectedRows = gridRef.current.api.getSelectedRows();
+    console.log(selectedRows[0])
     setDetails(selectedRows[0]);
     setIsShown(true);
   };
@@ -49,7 +64,9 @@ const RightPanel = (props) => {
         <AgGridReact
           className='data'
           domLayout='autoHeight'
-          rowData={data}
+          rowModelType='infinite'
+          //rowData={data}
+          datasource={data}
           columnDefs={columnDefs}
           defaultColDef={defaultColDef}
           rowSelection={'single'}
@@ -58,7 +75,13 @@ const RightPanel = (props) => {
         />
       </div>  
       }
-      {isShown && <ItemInfo details={details} query={props.query} setIsShown={setIsShown} value={value} setValue={setValue}/>}
+      {isShown && <ItemInfo details={details} setDetails={setDetails} query={props.query} setIsShown={setIsShown} value={value} setValue={setValue} 
+      setOpenSnackbar={setOpenSnackbar}/>}
+      <Snackbar open={openSnackbar} autoHideDuration={2000} onClose={() => setOpenSnackbar(false)}>
+          <Alert onClose={() => setOpenSnackbar(false)} severity='success' variant='filled'> 
+                Successfully updated database
+          </Alert>
+      </Snackbar>
     </div>
   )
 }

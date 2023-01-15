@@ -2,12 +2,8 @@ import React, { useState } from 'react';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
-import Collapse from '@mui/material/Collapse';
-import List from '@mui/material/List';
-import { styled } from '@mui/material/styles';
+import AddIcon from '@mui/icons-material/Add';
+import { IconButton, Tooltip, Dialog, DialogTitle } from '@mui/material';
 
 // const StyledListItemButton = styled(ListItemButton)({
 //     // selected and (selected + hover) states
@@ -27,7 +23,8 @@ import { styled } from '@mui/material/styles';
 //   });
 
 const LeftPanelListItem = (props) => {
-    const LeftPanelColor = '#1976d2';
+    const [addDialogOpen, setAddDialogOpen] = useState(false);
+    const leftPanelColor = '#1976d2';
 
     const handleClickOpen = () => {
         props.setSelectedIndex(props.index);
@@ -72,23 +69,31 @@ const LeftPanelListItem = (props) => {
 
     return (
         <div>
+            <Dialog open={addDialogOpen} onClose={() => setAddDialogOpen(false)}>
+                <DialogTitle>Add</DialogTitle>
+            </Dialog>
             <ListItem disablePadding>
                 <ListItemButton 
                     onClick={handleClickOpen} 
                     selected={props.selectedIndex === props.index}
                     sx={{
                         '&.Mui-selected': {
-                            backgroundColor: LeftPanelColor,
+                            backgroundColor: leftPanelColor,
                         },
                         '&.Mui-selected:hover': {
-                            backgroundColor: LeftPanelColor,
+                            backgroundColor: leftPanelColor,
                         },
                         ':hover': {
-                            backgroundColor: LeftPanelColor,
+                            backgroundColor: leftPanelColor,
                         }
                     }}>
                     <ListItemText primary={props.text} primaryTypographyProps={{fontSize: 'large'}}/>
                 </ListItemButton>
+                <Tooltip title={`Add new ${props.text.toLowerCase().substr(0, props.text.length - 1)} to database`} placement='right'>
+                    <IconButton>
+                        <AddIcon/>
+                    </IconButton>
+                </Tooltip>
             </ListItem>
         </div>
     );

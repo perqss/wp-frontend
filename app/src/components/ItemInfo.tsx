@@ -1,19 +1,15 @@
 import React, {useEffect, useState, useRef} from 'react';
-import Paper from '@mui/material/Paper';
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-material.css';
-import Button from '@mui/material/Button';
+import UpdateDialog from './UpdateDialog';
+import { Button, Dialog, IconButton, Typography, Tooltip, Box, Paper, Grid, DialogTitle } from '@mui/material';
 
 const ItemInfo = (props) => {
     const [holidayData, setHolidayData] = useState();
     const [holidayColumnDefs, setHolidayColumnDefs] = useState<any>();
+    const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
     const defaultHolidayColDef = {
         flex: 1,
         resizable: true,
@@ -40,7 +36,11 @@ const ItemInfo = (props) => {
     const parseStops = (stops) => {
         let data = stops.map(stopName => {return {stopName}});
         return data;
-    }
+    };
+
+    const handleUpdate = () => {
+        setUpdateDialogOpen(true);
+    };
 
     const handleLeftStopsClick = () => {
         if (stopsReversed.current) {
@@ -72,6 +72,28 @@ const ItemInfo = (props) => {
         }
     };
 
+    const renderUpdateButtons = () => {
+        if (props.query === 'employees') {
+            return (
+                <Button variant='contained' sx={{marginTop: 5}} onClick={handleUpdate}>
+                    Update Employee
+                </Button>
+            );
+        } else if (props.query === 'buildings') {
+            return (
+                <Button variant='contained' sx={{marginTop: 5}} onClick={handleUpdate}>
+                    Update Building
+                </Button>
+            );
+        } else if (props.query === 'tickets') {
+            return (
+                <Button variant='contained' sx={{marginTop: 5}} onClick={handleUpdate}>
+                    Update Ticket
+                </Button>
+            ); 
+        }
+    };
+
     useEffect(() => {
         if (props.query === 'employees') {
             fetch(`${process.env.REACT_APP_URL}/employees/${props.details.employeeID}/holidays`)
@@ -93,6 +115,11 @@ const ItemInfo = (props) => {
 
     return (
     <Box sx={{flex: 6, marginLeft: 10}}>
+        <Dialog open={updateDialogOpen} onClose={() => setUpdateDialogOpen(false)}>
+            <DialogTitle>Update</DialogTitle>
+            <UpdateDialog query={props.query} setUpdateDialogOpen={setUpdateDialogOpen} objectToUpdate={props.details} value={props.value} setValue={props.setValue}
+            setOpenSnackbar={props.setOpenSnackbar}/>
+        </Dialog>
         <Typography variant='h6' gutterBottom sx={{marginTop: 0.6}}>
             Details
         </Typography>
@@ -110,6 +137,7 @@ const ItemInfo = (props) => {
             }
             )}
         </Grid>
+        {renderUpdateButtons()}
         {props.query === 'employees' ? 
             <Typography variant='h6' gutterBottom sx={{marginTop: 5}}>
                 Holidays
