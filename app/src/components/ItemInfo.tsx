@@ -3,14 +3,17 @@ import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-material.css';
-import UpdateDialog from './UpdateDialog';
+import Form from './Form';
 import { Button, Dialog, IconButton, Typography, Tooltip, Box, Paper, Grid, DialogTitle } from '@mui/material';
+import Logger from '../logger/Logger';
 
 const ItemInfo = (props) => {
+    const logger = Logger.getInstance();
+    //logger.log(`Object sent to ItemInfo: ${JSON.stringify(props.details)}`);
     const [holidayData, setHolidayData] = useState();
     const [holidayColumnDefs, setHolidayColumnDefs] = useState<any>();
-    const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
-    const defaultHolidayColDef = {
+    const [updateFormOpen, setUpdateFormOpen] = useState(false);
+    const defaultColDef = {
         flex: 1,
         resizable: true,
         wrapText: true,
@@ -19,18 +22,14 @@ const ItemInfo = (props) => {
         sortable: true,
         wrapHeaderText: true,
         autoHeaderHeight: true,
-      };
+    };
+    const defaultHolidayColDef = defaultColDef;
     const [stopsData, setStopsData] = useState<any>();
     const [stopsColumnDefs, setStopsColumnDefs] = useState<any>();
-    const defaultStopsColDef = {
-        flex: 1,
-        resizable: true,
-        wrapText: true,
-        autoHeight: true,
-        filter: true,
-        wrapHeaderText: true,
-        autoHeaderHeight: true,
-      };
+    const defaultStopsColDef = defaultColDef;
+    const [repairsData, setRepairsData] = useState<any>();
+    const [repairsColumnDefs, setRepairsColumnDefs] = useState<any>();
+    const defaultRepairsColDef = defaultColDef;
     var stopsReversed = useRef(false);
     
     const parseStops = (stops) => {
@@ -38,8 +37,10 @@ const ItemInfo = (props) => {
         return data;
     };
 
+    console.log(props.details.repairHistory)
+
     const handleUpdate = () => {
-        setUpdateDialogOpen(true);
+        setUpdateFormOpen(true);
     };
 
     const handleLeftStopsClick = () => {
@@ -75,19 +76,19 @@ const ItemInfo = (props) => {
     const renderUpdateButtons = () => {
         if (props.query === 'employees') {
             return (
-                <Button variant='contained' sx={{marginTop: 5}} onClick={handleUpdate}>
+                <Button variant='contained' sx={{marginTop: 5, backgroundColor: '#0c2d64'}} onClick={handleUpdate}>
                     Update Employee
                 </Button>
             );
         } else if (props.query === 'buildings') {
             return (
-                <Button variant='contained' sx={{marginTop: 5}} onClick={handleUpdate}>
+                <Button variant='contained' sx={{marginTop: 5, backgroundColor: '#0c2d64'}} onClick={handleUpdate}>
                     Update Building
                 </Button>
             );
         } else if (props.query === 'tickets') {
             return (
-                <Button variant='contained' sx={{marginTop: 5}} onClick={handleUpdate}>
+                <Button variant='contained' sx={{marginTop: 5, backgroundColor: '#0c2d64'}} onClick={handleUpdate}>
                     Update Ticket
                 </Button>
             ); 
@@ -110,25 +111,35 @@ const ItemInfo = (props) => {
             setStopsColumnDefs([
                 {field: 'stopName'},
             ])
+        } else if (props.query === 'vehicles') {
+            console.log(props.details.repairHistory)
+            setRepairsData(props.details.repairHistory);
+            setRepairsColumnDefs([
+                {field: 'dateFrom'},
+                {field: 'dateTo'},
+                {field: 'notes'},
+                {field: 'technicianFirstName'},
+                {field: 'technicianLastName'},
+            ])
         }
       }, [props.details]);
 
     return (
     <Box sx={{flex: 6, marginLeft: 10}}>
-        <Dialog open={updateDialogOpen} onClose={() => setUpdateDialogOpen(false)}>
+        <Dialog open={updateFormOpen} onClose={() => setUpdateFormOpen(false)}>
             <DialogTitle>Update</DialogTitle>
-            <UpdateDialog query={props.query} setUpdateDialogOpen={setUpdateDialogOpen} objectToUpdate={props.details} value={props.value} setValue={props.setValue}
-            setOpenSnackbar={props.setOpenSnackbar}/>
+            <Form query={props.query} setUpdateFormOpen={setUpdateFormOpen} objectToUpdate={props.details} value={props.value} setValue={props.setValue}
+            setOpenUpdateSnackbar={props.setOpenUpdateSnackbar}/>
         </Dialog>
-        <Typography variant='h6' gutterBottom sx={{marginTop: 0.6}}>
+        <Typography variant='h6' gutterBottom sx={{marginTop: 0.6, color: '#0c2d64'}}>
             Details
         </Typography>
         <Grid container spacing={3}>
             {Object.keys(props.details).map(key => {
-                if (key !== 'stops') {
+                if (key !== 'stops' && key !== 'repairHistory') {
                     return (
                     <Grid item key={key}>
-                        <Paper elevation={1} key={key}>
+                        <Paper elevation={1} key={key} sx={{backgroundColor: '#e7efee'}}>
                             {key}: {`${props.details[key]}`}
                         </Paper>
                     </Grid>
@@ -138,8 +149,15 @@ const ItemInfo = (props) => {
             )}
         </Grid>
         {renderUpdateButtons()}
+        {props.query === 'employees' || props.query === 'tickets' ? 
+            <Tooltip title='Delete item from database'>
+                <IconButton sx={{marginTop: 5}} onClick={handleDelete}>
+                    <DeleteOutlinedIcon sx={{color: 'red', fontSize: 40}}/>
+                </IconButton>
+            </Tooltip> : ''
+        }
         {props.query === 'employees' ? 
-            <Typography variant='h6' gutterBottom sx={{marginTop: 5}}>
+            <Typography variant='h6' gutterBottom sx={{marginTop: 5, color: '#0c2d64'}}>
                 Holidays
             </Typography> : ''
         }
@@ -149,20 +167,25 @@ const ItemInfo = (props) => {
             className='data'
             domLayout='autoHeight'
             rowData={holidayData}
+            pagination={true}
+            paginationPageSize={10}
             columnDefs={holidayColumnDefs}
             defaultColDef={defaultHolidayColDef}
             />
         </div>  
         }
-         
         {stopsData && 
             <div style={{marginTop: 15}}>
-                <Button onClick={handleLeftStopsClick} sx={{textTransform: 'none'}} variant='contained'>{props.details.stops[0]} - {props.details.stops[props.details.stops.length - 1]}</Button>
-                <Button onClick={handleRightStopsClick} sx={{textTransform: 'none', marginLeft: 5}} variant='contained'>{props.details.stops[props.details.stops.length - 1]} - {props.details.stops[0]}</Button>
+                <Button onClick={handleLeftStopsClick} sx={{textTransform: 'none', backgroundColor: '#0c2d64'}} variant='contained'>
+                    {props.details.stops[0]} - {props.details.stops[props.details.stops.length - 1]}</Button>
+                <Button onClick={handleRightStopsClick} sx={{textTransform: 'none', marginLeft: 5, backgroundColor: '#0c2d64'}} variant='contained'>
+                    {props.details.stops[props.details.stops.length - 1]} - {props.details.stops[0]}</Button>
                 <div className='ag-theme-material' style={{marginTop: 20}}>
                     <AgGridReact
                     className='data'
                     domLayout='autoHeight'
+                    pagination={true}
+                    paginationPageSize={10}
                     rowData={stopsData}
                     columnDefs={stopsColumnDefs}
                     defaultColDef={defaultStopsColDef}
@@ -170,12 +193,25 @@ const ItemInfo = (props) => {
                 </div>
             </div>
         }
-        {props.query === 'employees' || props.query === 'tickets' ? 
-            <Tooltip title='Delete item from database'>
-                <IconButton sx={{marginTop: 5}} onClick={handleDelete}>
-                    <DeleteOutlinedIcon sx={{color: 'red', fontSize: 40}}/>
-                </IconButton>
-            </Tooltip> : ''
+        {props.query === 'vehicles' ? 
+            <Typography variant='h6' gutterBottom sx={{marginTop: 5, color: '#0c2d64'}}>
+                Repair History
+            </Typography> : ''
+        }
+        {repairsData &&
+            <div style={{marginTop: 15}}>
+                <div className='ag-theme-material' style={{marginTop: 20}}>
+                    <AgGridReact
+                    className='data'
+                    domLayout='autoHeight'
+                    pagination={true}
+                    paginationPageSize={10}
+                    rowData={repairsData}
+                    columnDefs={repairsColumnDefs}
+                    defaultColDef={defaultRepairsColDef}
+                    />
+                </div>
+            </div>
         }
     </Box>
   )

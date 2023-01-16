@@ -1,35 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import AddIcon from '@mui/icons-material/Add';
-import { IconButton, Tooltip, Dialog, DialogTitle } from '@mui/material';
-
-// const StyledListItemButton = styled(ListItemButton)({
-//     // selected and (selected + hover) states
-//     '&& .Mui-selected, && .Mui-selected:hover': {
-//       backgroundColor: 'red',
-//       '&, & .MuiListItemIcon-root': {
-//         color: 'pink',
-//       },
-//     },
-//     // hover states
-//     '& .MuiListItemButton-root:hover': {
-//       backgroundColor: 'orange',
-//       '&, & .MuiListItemIcon-root': {
-//         color: 'yellow',
-//       },
-//     },
-//   });
+import { IconButton, Tooltip, Dialog, DialogTitle, Snackbar, Alert } from '@mui/material';
+import Form from './Form';
+import Logger from '../logger/Logger';
 
 const LeftPanelListItem = (props) => {
-    const [addDialogOpen, setAddDialogOpen] = useState(false);
-    const leftPanelColor = '#1976d2';
+    const logger = Logger.getInstance();
+    const addableFields = ['Employees', 'Buildings', 'Air Readings', 'Tickets'];
+    const [addFormOpen, setAddFormOpen] = useState(false);
+    const [openAddSnackbar, setOpenAddSnackbar] = useState(false);
+    const leftPanelColor = '#0e3678';
+    const text = props.text.toLowerCase();
 
     const handleClickOpen = () => {
         props.setSelectedIndex(props.index);
         props.setOpen(true);
-        props.query.current = props.text.toLowerCase();
+        props.query.current = text;
+        logger.log(`Getting ${text} from database`);
 
         if (props.query.current === 'air readings') {
             props.query.current = 'airReadings';
@@ -64,13 +54,24 @@ const LeftPanelListItem = (props) => {
             props.setColumnDefs([
                 {field: 'lineId'}
             ])
+        } else if (props.query.current === 'vehicles') {
+            props.setColumnDefs([
+                {field: 'vehicleId'},
+                {field: 'modelName'},
+            ])
         }
+    };
+
+    const handleClickAdd = () => {
+        setAddFormOpen(true);
     };
 
     return (
         <div>
-            <Dialog open={addDialogOpen} onClose={() => setAddDialogOpen(false)}>
+            <Dialog open={addFormOpen} onClose={() => setAddFormOpen(false)}>
                 <DialogTitle>Add</DialogTitle>
+                <Form query={text} setAddFormOpen={setAddFormOpen} value={props.value} setValue={props.setValue}
+                setOpenAddSnackbar={setOpenAddSnackbar} add/>
             </Dialog>
             <ListItem disablePadding>
                 <ListItemButton 
@@ -87,14 +88,21 @@ const LeftPanelListItem = (props) => {
                             backgroundColor: leftPanelColor,
                         }
                     }}>
-                    <ListItemText primary={props.text} primaryTypographyProps={{fontSize: 'large'}}/>
+                    <ListItemText primary={props.text} primaryTypographyProps={{fontSize: 'large', color: 'white'}}/>
                 </ListItemButton>
-                <Tooltip title={`Add new ${props.text.toLowerCase().substr(0, props.text.length - 1)} to database`} placement='right'>
-                    <IconButton>
-                        <AddIcon/>
-                    </IconButton>
-                </Tooltip>
+                {addableFields.includes(props.text) &&
+                    <Tooltip title={`Add new ${props.text.toLowerCase().substr(0, props.text.length - 1)} to database`} placement='right'>
+                        <IconButton onClick={handleClickAdd}>
+                            <AddIcon sx={{color: 'white'}}/>
+                        </IconButton>
+                    </Tooltip>
+                }  
             </ListItem>
+            <Snackbar open={openAddSnackbar} autoHideDuration={2000} onClose={() => setOpenAddSnackbar(false)}>
+                <Alert onClose={() => setOpenAddSnackbar(false)} severity='success' variant='filled'> 
+                        Successfully updated database
+                </Alert>
+            </Snackbar>
         </div>
     );
 }
