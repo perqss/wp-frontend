@@ -11,6 +11,8 @@ const RightPanel = (props) => {
   const [columnDefs, setColumnDefs] = useState();
   const [openUpdateSnackbar, setOpenUpdateSnackbar] = useState(false);
   const [snackbarUpdateMessage, setSnackbarUpdateMessage] = useState();
+  const [openDeleteSnackbar, setOpenDeleteSnackbar] = useState(false);
+  const [snackbarDeleteMessage, setSnackbarDeleteMessage] = useState('');
   const gridRef = useRef<any>(null);
   const [details, setDetails] = useState();
   const defaultColDef = {
@@ -65,10 +67,16 @@ const RightPanel = (props) => {
       </div>  
       }
       {isShown && <ItemInfo details={details} setDetails={setDetails} query={props.query} setIsShown={setIsShown} value={props.value} setValue={props.setValue} 
-      setOpenUpdateSnackbar={setOpenUpdateSnackbar} setSnackbarUpdateMessage={setSnackbarUpdateMessage}/>}
+      setOpenUpdateSnackbar={setOpenUpdateSnackbar} setSnackbarUpdateMessage={setSnackbarUpdateMessage} setOpenDeleteSnackbar={setOpenDeleteSnackbar}
+      setSnackbarDeleteMessage={setSnackbarDeleteMessage}/>}
       <Snackbar open={openUpdateSnackbar} autoHideDuration={2000} onClose={() => setOpenUpdateSnackbar(false)}>
           <Alert onClose={() => setOpenUpdateSnackbar(false)} severity='success' variant='filled'> 
                 {snackbarUpdateMessage}
+          </Alert>
+      </Snackbar>
+      <Snackbar open={openDeleteSnackbar} autoHideDuration={2000} onClose={() => setOpenDeleteSnackbar(false)}>
+          <Alert onClose={() => setOpenDeleteSnackbar(false)} severity='success' variant='filled'> 
+                {snackbarDeleteMessage}
           </Alert>
       </Snackbar>
     </div>

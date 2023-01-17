@@ -4,7 +4,7 @@ import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-material.css';
 import Form from './Form';
-import { Button, Dialog, IconButton, Typography, Tooltip, Box, Paper, Grid, DialogTitle } from '@mui/material';
+import { Button, Dialog, IconButton, Typography, Tooltip, Box, Paper, Grid, DialogTitle, Snackbar, Alert } from '@mui/material';
 import Logger from '../logger/Logger';
 
 const ItemInfo = (props) => {
@@ -37,6 +37,14 @@ const ItemInfo = (props) => {
         return data;
     };
 
+    const parseHolidays = (holidays) => {
+        for (let i = 0; i < holidays.length; i++) {
+            holidays[i].dateFrom = holidays[i].dateFrom.join('-');
+            holidays[i].dateTo = holidays[i].dateTo.join('-');
+        }
+        return holidays;
+    };
+
     const handleUpdate = () => {
         setUpdateFormOpen(true);
     };
@@ -61,14 +69,17 @@ const ItemInfo = (props) => {
         if (props.query === 'employees') {
             fetch(`${process.env.REACT_APP_URL}/employees/${props.details.employeeID}`, {method: 'DELETE'})
             .then(() => {
-                props.setValue(props.value + 1);
+                props.setOpenDeleteSnackbar(true);
+                props.setSnackbarDeleteMessage('Successfully deleted employee');
             })
         } else if (props.query === 'tickets') {
             fetch(`${process.env.REACT_APP_URL}/tickets/${props.details.ticketId}`, {method: 'DELETE'})
             .then(() => {
-                props.setValue(props.value + 1);
+                props.setOpenDeleteSnackbar(true);
+                props.setSnackbarDeleteMessage('Successfully deleted ticket');
             })
         }
+        props.setValue(props.value + 1);
     };
 
     const renderUpdateButtons = () => {
@@ -98,6 +109,7 @@ const ItemInfo = (props) => {
             fetch(`${process.env.REACT_APP_URL}/employees/${props.details.employeeID}/holidays`)
             .then(result => result.json())
             .then(data => {
+                parseHolidays(data)
                 setHolidayData(data);
                 setHolidayColumnDefs([
                     {field: 'dateFrom'},
@@ -126,7 +138,7 @@ const ItemInfo = (props) => {
         const result = camelCaseWord.replace(/([A-Z])/g, " $1");
         const finalResult = result.charAt(0).toUpperCase() + result.slice(1);
         return finalResult;
-      }
+      };
 
     return (
     <Box sx={{flex: 6, marginLeft: 10}}>
@@ -143,7 +155,7 @@ const ItemInfo = (props) => {
                 if (key !== 'stops' && key !== 'repairHistory') {
                     return (
                     <Grid item key={key}>
-                        <Paper elevation={1} key={key} sx={{backgroundColor: '#e7efee'}}>
+                        <Paper elevation={1} key={key}>
                             {camelToTitle(key)}: {`${props.details[key]}`}
                         </Paper>
                     </Grid>

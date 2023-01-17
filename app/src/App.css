@@ -48,12 +48,9 @@
 }
 
 .ag-theme-material {
-  --ag-header-background-color: #e7efee;
   --ag-header-cell-hover-background-color: #113c86;
   --ag-selected-row-background-color: #acb4b3;
   --ag-row-hover-color: #dde4e3;
-  --ag-background-color: #e7efee;
-  --ag-odd-row-background-color: #e4ebea;
   --ag-border-color: black;
 }
 

@@ -3,7 +3,6 @@ import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import LeftPanelListItem from './LeftPanelListItem';
 import RightPanel from './RightPanel';
-import { SplitPane } from 'react-collapse-pane';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import Button from '@mui/material/Button';
@@ -26,7 +25,7 @@ const LeftPanel = () => {
     // };
 
     return (
-        <div style={{backgroundColor: '#e7efee', width: '100vw', height: '100vh'}}>
+        <div style={{width: '100vw', height: '100vh'}}>
             <Box sx={{display: 'flex', flexDirection: 'row'}}>
                 <Box sx={{ width: 200, height: '100vh', display: 'flex', flexDirection: 'column', position: 'fixed'}}>
                     <List sx={{backgroundColor: color}}>
