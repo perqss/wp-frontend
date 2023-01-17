@@ -13,7 +13,7 @@ const Form = (props) => {
     if (!props.add) {
       let object = props.objectToUpdate;
       if (props.query === 'employees') {
-        let employee = new Employee(object.pesel, object.firstName, object.lastName, object.gender, object.birthDate, 
+        let employee = new Employee(object.employeeID, object.pesel, object.firstName, object.lastName, object.gender, object.birthDate, 
         object.hireDate, object.phoneNumber, object.address, object.city, object.departmentID);
         setValues(employee);
       } else if (props.query === 'buildings') {
@@ -74,6 +74,7 @@ const Form = (props) => {
           return response.json();
         } else {
           props.setOpenUpdateSnackbar(true);
+          props.setSnackbarUpdateMessage(`Successfully updated ${props.query.substr(0, props.query.length - 1)}`);
           props.setUpdateFormOpen(false);
           return null;
         }
@@ -99,6 +100,7 @@ const Form = (props) => {
           return response.json();
         } else {
           props.setOpenAddSnackbar(true);
+          props.setSnackbarAddMessage(`Successfully added ${props.query.substr(0, props.query.length - 1)}`);
           props.setAddFormOpen(false);
           return null;
         }

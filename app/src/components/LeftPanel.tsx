@@ -3,9 +3,15 @@ import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import LeftPanelListItem from './LeftPanelListItem';
 import RightPanel from './RightPanel';
+import { SplitPane } from 'react-collapse-pane';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import Button from '@mui/material/Button';
+import { IconButton } from '@mui/material';
 
 const LeftPanel = () => {
     const [open, setOpen] = useState(false);
+    //const [openPanel, setOpenPanel] = useState(true);
     const [value, setValue] = useState(0);
     const query = useRef();
     const gridRef = useRef<any>(null);
@@ -20,8 +26,9 @@ const LeftPanel = () => {
     // };
 
     return (
+        <div style={{backgroundColor: '#e7efee', width: '100vw', height: '100vh'}}>
             <Box sx={{display: 'flex', flexDirection: 'row'}}>
-                <Box sx={{ width: '100vw', maxWidth: '15vw', height: '100vh', display: 'flex', flexDirection: 'column' }}>
+                <Box sx={{ width: 200, height: '100vh', display: 'flex', flexDirection: 'column', position: 'fixed'}}>
                     <List sx={{backgroundColor: color}}>
                         {items.map((item, index) => 
                             <LeftPanelListItem key={item} text={item} index={index} open={open} setOpen={setOpen} 
@@ -29,18 +36,17 @@ const LeftPanel = () => {
                             value={value} setValue={setValue}/>
                         )}
                     </List>
-                    {/* <select onChange={() => onPageSizeChanged()} id="page-size" defaultValue={15} style={{height: 200, backgroundColor: '#e7efee'}}>
-                        <option value="15">15</option>
-                        <option value="25">25</option>
-                        <option value="100">100</option>
-                        <option value="500">500</option>
-                        <option value="1000">1000</option>
-                        <option value="1500">1500</option>
-                    </select> */}
+                    {/* <div style={{backgroundColor: color, justifyContent: 'center', alignItems: 'center', display: 'flex'}}>
+                         <IconButton sx={{color: 'white'}}>
+                            {openPanel ? <ArrowBackIosNewIcon/> : <ArrowForwardIosIcon/>}
+                        </IconButton> 
+                    </div> */}
                     <div style={{backgroundColor: color, height: '100%'}}/>
                 </Box>
-                {open ? <RightPanel query={query.current} columnDefs={columnDefs} value={value} setValue={setValue}/> : ''}
+
+                {open ? <RightPanel className='right-panel' query={query.current} columnDefs={columnDefs} value={value} setValue={setValue}/> : ''}
             </Box>
+        </div>
         );
 }
 

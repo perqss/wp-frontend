@@ -37,8 +37,6 @@ const ItemInfo = (props) => {
         return data;
     };
 
-    console.log(props.details.repairHistory)
-
     const handleUpdate = () => {
         setUpdateFormOpen(true);
     };
@@ -124,12 +122,18 @@ const ItemInfo = (props) => {
         }
       }, [props.details]);
 
+      const camelToTitle = (camelCaseWord: string) => {
+        const result = camelCaseWord.replace(/([A-Z])/g, " $1");
+        const finalResult = result.charAt(0).toUpperCase() + result.slice(1);
+        return finalResult;
+      }
+
     return (
     <Box sx={{flex: 6, marginLeft: 10}}>
         <Dialog open={updateFormOpen} onClose={() => setUpdateFormOpen(false)}>
             <DialogTitle>Update</DialogTitle>
             <Form query={props.query} setUpdateFormOpen={setUpdateFormOpen} objectToUpdate={props.details} value={props.value} setValue={props.setValue}
-            setOpenUpdateSnackbar={props.setOpenUpdateSnackbar}/>
+            setOpenUpdateSnackbar={props.setOpenUpdateSnackbar} setSnackbarUpdateMessage={props.setSnackbarUpdateMessage}/>
         </Dialog>
         <Typography variant='h6' gutterBottom sx={{marginTop: 0.6, color: '#0c2d64'}}>
             Details
@@ -140,7 +144,7 @@ const ItemInfo = (props) => {
                     return (
                     <Grid item key={key}>
                         <Paper elevation={1} key={key} sx={{backgroundColor: '#e7efee'}}>
-                            {key}: {`${props.details[key]}`}
+                            {camelToTitle(key)}: {`${props.details[key]}`}
                         </Paper>
                     </Grid>
                     );
@@ -167,8 +171,6 @@ const ItemInfo = (props) => {
             className='data'
             domLayout='autoHeight'
             rowData={holidayData}
-            pagination={true}
-            paginationPageSize={10}
             columnDefs={holidayColumnDefs}
             defaultColDef={defaultHolidayColDef}
             />
@@ -184,8 +186,6 @@ const ItemInfo = (props) => {
                     <AgGridReact
                     className='data'
                     domLayout='autoHeight'
-                    pagination={true}
-                    paginationPageSize={10}
                     rowData={stopsData}
                     columnDefs={stopsColumnDefs}
                     defaultColDef={defaultStopsColDef}
@@ -204,8 +204,6 @@ const ItemInfo = (props) => {
                     <AgGridReact
                     className='data'
                     domLayout='autoHeight'
-                    pagination={true}
-                    paginationPageSize={10}
                     rowData={repairsData}
                     columnDefs={repairsColumnDefs}
                     defaultColDef={defaultRepairsColDef}

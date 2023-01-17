@@ -56,3 +56,11 @@
   --ag-odd-row-background-color: #e4ebea;
   --ag-border-color: black;
 }
+
+.right-panel {
+  width: calc(100vw - 200px);
+  left: 200px;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+}

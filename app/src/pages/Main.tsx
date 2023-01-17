@@ -6,7 +6,7 @@ const Main = () => {
   const logger = Logger.getInstance();
   logger.log('started application');
   return (
-    <div style={{backgroundColor: '#e7efee'}}>
+    <div style={{overflowX: 'hidden'}}>
       <LeftPanel/>
     </div>
   );
