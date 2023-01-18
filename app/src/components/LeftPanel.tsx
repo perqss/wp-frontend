@@ -10,7 +10,6 @@ import { IconButton } from '@mui/material';
 
 const LeftPanel = () => {
     const [open, setOpen] = useState(false);
-    //const [openPanel, setOpenPanel] = useState(true);
     const [value, setValue] = useState(0);
     const query = useRef();
     const gridRef = useRef<any>(null);
@@ -18,11 +17,6 @@ const LeftPanel = () => {
     const items = ['Employees', 'Air Readings', 'Buildings', 'Tickets', 'Vehicles', 'Tram Lines', 'Bus Lines', 'Stops'];
     const [selectedIndex, setSelectedIndex] = useState<number>();
     const color = '#0c2d64';
-
-    // const onPageSizeChanged = () => {
-    //     var value = (document.getElementById('page-size') as HTMLInputElement).value;
-    //     gridRef.current.api.paginationSetPageSize(Number(value));
-    // };
 
     return (
         <div style={{width: '100vw', height: '100vh'}}>
@@ -35,11 +29,6 @@ const LeftPanel = () => {
                             value={value} setValue={setValue}/>
                         )}
                     </List>
-                    {/* <div style={{backgroundColor: color, justifyContent: 'center', alignItems: 'center', display: 'flex'}}>
-                         <IconButton sx={{color: 'white'}}>
-                            {openPanel ? <ArrowBackIosNewIcon/> : <ArrowForwardIosIcon/>}
-                        </IconButton> 
-                    </div> */}
                     <div style={{backgroundColor: color, height: '100%'}}/>
                 </Box>
 

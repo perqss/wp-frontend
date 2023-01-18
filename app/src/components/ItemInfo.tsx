@@ -9,7 +9,8 @@ import Logger from '../logger/Logger';
 
 const ItemInfo = (props) => {
     const logger = Logger.getInstance();
-    //logger.log(`Object sent to ItemInfo: ${JSON.stringify(props.details)}`);
+    console.log(props.details)
+    logger.log(`Object sent to ItemInfo: ${JSON.stringify(props.details)}`);
     const [holidayData, setHolidayData] = useState();
     const [holidayColumnDefs, setHolidayColumnDefs] = useState<any>();
     const [updateFormOpen, setUpdateFormOpen] = useState(false);
@@ -135,10 +136,20 @@ const ItemInfo = (props) => {
       }, [props.details]);
 
       const camelToTitle = (camelCaseWord: string) => {
-        const result = camelCaseWord.replace(/([A-Z])/g, " $1");
-        const finalResult = result.charAt(0).toUpperCase() + result.slice(1);
-        return finalResult;
+        if (camelCaseWord === 'employeeID') {
+            return 'Employee ID';
+        } else if (camelCaseWord === 'departmentID') {
+            return 'Department ID';
+        } else if (camelCaseWord !== 'NO2' && camelCaseWord !== 'O3' && camelCaseWord !== 'PM10' && camelCaseWord !== 'PM25' && camelCaseWord !== 'SO2') {
+            const result = camelCaseWord.replace(/([A-Z])/g, " $1");
+            const finalResult = result.charAt(0).toUpperCase() + result.slice(1);
+            return finalResult;
+        } else {
+            return camelCaseWord;
+        }
       };
+
+      console.log(props.details)
 
     return (
     <Box sx={{flex: 6, marginLeft: 10}}>
@@ -152,7 +163,7 @@ const ItemInfo = (props) => {
         </Typography>
         <Grid container spacing={3}>
             {Object.keys(props.details).map(key => {
-                if (key !== 'stops' && key !== 'repairHistory') {
+                if (key !== 'stops' && key !== 'repairHistory' && key !== 'no2' && key !== 'o3' && key !== 'pm10' && key !== 'pm25' && key !== 'so2') {
                     return (
                     <Grid item key={key}>
                         <Paper elevation={1} key={key}>
