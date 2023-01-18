@@ -1,13 +1,13 @@
 class Ticket {
-    tickedId: number;
+    tickedId: any;
     name: string;
-    price: number;
-    periodic: boolean;
+    price: any;
+    periodic: any;
 
-    constructor(ticketId?: number, name?: string, price?: number, periodic?: boolean) {
-        this.tickedId = ticketId ?? 1;
+    constructor(ticketId?: any, name?: string, price?: any, periodic?: any) {
+        this.tickedId = ticketId ?? '';
         this.name = name ?? '';
-        this.price = price ?? 0;
+        this.price = price ?? '';
         this.periodic = periodic ?? false;
     };
 };

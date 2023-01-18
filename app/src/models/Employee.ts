@@ -1,5 +1,5 @@
 class Employee {
-    employeeID: number;
+    employeeID: any;
     pesel: string;
     firstName: string;
     lastName: string;
@@ -9,11 +9,11 @@ class Employee {
     phoneNumber: string;
     address: string;
     city: string;
-    departmentID: number;
+    departmentID: any;
 
-    constructor(employeeID?: number, pesel?: string, firstName?: string, lastName?: string, gender?: string, birthDate?: string, hireDate?: string, phoneNumber?: string, 
-        address?: string, city?: string, departmentID?: number) {
-        this.employeeID = employeeID ?? 1;
+    constructor(employeeID?: any, pesel?: string, firstName?: string, lastName?: string, gender?: string, birthDate?: string, hireDate?: string, phoneNumber?: string, 
+        address?: string, city?: string, departmentID?: any) {
+        this.employeeID = employeeID ?? '';
         this.pesel = pesel ?? '';
         this.firstName = firstName ?? '';
         this.lastName = lastName ?? '';
@@ -23,7 +23,7 @@ class Employee {
         this.phoneNumber = phoneNumber ?? '';
         this.address = address ?? '';
         this.city = city ?? '';
-        this.departmentID = departmentID ?? 0;
+        this.departmentID = departmentID ?? '';
     }
 }
 

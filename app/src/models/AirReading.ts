@@ -1,18 +1,18 @@
 class AirReading {
     airReadingDate: string;
-    pm10: number;
-    so2: number;
-    pm25: number;
-    no2: number;
-    o3: number;
+    pm10: any;
+    so2: any;
+    pm25: any;
+    no2: any;
+    o3: any;
 
-    constructor(airReadingDate?: string, pm10?: number, so2?: number, pm25?: number, no2?: number, o3?: number) {
+    constructor(airReadingDate?: string, pm10?: any, so2?: any, pm25?: any, no2?: any, o3?: any) {
         this.airReadingDate = airReadingDate ?? '';
-        this.pm10 = pm10 ?? 0;
-        this.so2 = so2 ?? 0;
-        this.pm25 = pm25 ?? 0;
-        this.no2 = no2 ?? 0;
-        this.o3 = o3 ?? 0;
+        this.pm10 = pm10 ?? '';
+        this.so2 = so2 ?? '';
+        this.pm25 = pm25 ?? '';
+        this.no2 = no2 ?? '';
+        this.o3 = o3 ?? '';
     }
 };  
 

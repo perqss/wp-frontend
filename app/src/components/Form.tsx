@@ -3,7 +3,8 @@ import Employee from '../models/Employee';
 import Building from '../models/Building';
 import Ticket from '../models/Ticket';
 import AirReading from '../models/AirReading';
-import { Alert, Box, Button, TextField } from '@mui/material';
+import { Alert, Box, Button, TextField, Grid } from '@mui/material';
+import FormTextField from './FormTextField';
 
 const Form = (props) => {
   const [values, setValues] = useState<any>();
@@ -48,8 +49,10 @@ const Form = (props) => {
   //   }
   // }, [errors]);
 
+
   const handleUpdate = async () => {
-    var url = `${process.env.REACT_APP_URL}/${props.query}`;
+    var url = `${process.env.REACT_APP_URL}/`;
+    props.query === 'air readings' ? url += 'airReadings' : url += `${props.query}`;
     if (!props.add) {
       if (props.query === 'employees') {
         url += `/${props.objectToUpdate.employeeID}`;
@@ -57,8 +60,8 @@ const Form = (props) => {
         url += `/${props.objectToUpdate.buildingId}`;
       } else if (props.query === 'tickets') {
         url += `/${props.objectToUpdate.ticketId}`;
-        var isTrueSet = (values.periodic === 'true');
-        isTrueSet ? values.periodic = true : values.periodic = false;
+        // var isTrueSet = (values.periodic === 'true');
+        // isTrueSet ? values.periodic = true : values.periodic = false;
       }
 
       await fetch(url, {
@@ -116,7 +119,16 @@ const Form = (props) => {
   };
 
   const handleInputChange = (e) => {
-    const {name, value} = e.target;
+    let {name, value, checked} = e.target;
+    // console.log(typeof value)
+    // console.log(e.target.checked)
+     //console.log(parseFloat(value))
+    // console.log(typeof value === 'string')
+    if (name === 'periodic') {
+      value = checked;
+    } else if (!name.includes('Date') && value !== '' && !isNaN(parseFloat(value))) {
+      value = parseFloat(value);
+    }
 
     setValues({
       ...values,
@@ -129,16 +141,16 @@ const Form = (props) => {
       return (
         <Box sx={{top: '50%', left: '50%', width: 400, p: 2, boxShadow: 24, bgcolor: 'background.paper', display: 'flex', alignItems: 'center', 
         justifyContent: 'center', flexDirection: 'column'}}>
-          {props.add && <TextField variant='outlined' name="pesel" label='Pesel' value={values.pesel} onChange={handleInputChange}/>}
-          <TextField variant='outlined' name="firstName" label='First Name' value={values.firstName} onChange={handleInputChange}/>
-          <TextField variant='outlined' name="lastName" label='Last Name' value={values.lastName} onChange={handleInputChange} sx={{marginTop: 1}}/>
-          <TextField variant='outlined' name="gender" label='Gender' value={values.gender} onChange={handleInputChange} sx={{marginTop: 1}}/>
-          {props.add && <TextField variant='outlined' name="birthDate" label='Birth Date' value={values.firstDate} onChange={handleInputChange}/>}
-          {props.add && <TextField variant='outlined' name="hireDate" label='HireDate' value={values.hireDate} onChange={handleInputChange}/>}
-          <TextField variant='outlined' name="phoneNumber" label='Phone Number' value={values.phoneNumber} onChange={handleInputChange} sx={{marginTop: 1}}/>
-          <TextField variant='outlined' name="city" label='City' value={values.city} onChange={handleInputChange} sx={{marginTop: 1}}/>
-          <TextField variant='outlined' name="address" label='Address' value={values.address} onChange={handleInputChange} sx={{marginTop: 1}}/>
-          {props.add && <TextField variant='outlined' name="departmentID" label='Department ID' value={values.departmentID} onChange={handleInputChange} sx={{marginTop: 1}}/>}
+          {props.add && <FormTextField variant='outlined' name="pesel" label='Pesel' type='number' value={values.pesel} onChange={handleInputChange}/>}
+          <FormTextField variant='outlined' name="firstName" label='First Name' type='text' value={values.firstName} onChange={handleInputChange}/>
+          <FormTextField variant='outlined' name="lastName" label='Last Name' type='text' value={values.lastName} onChange={handleInputChange} sx={{marginTop: 1}}/>
+          <FormTextField variant='outlined' name="gender" label='Gender' type='text' value={values.gender} onChange={handleInputChange} sx={{marginTop: 1}}/>
+          {props.add && <FormTextField variant='outlined' label='Birth Date' name="birthDate" InputLabelProps={{shrink: true}} type='date' value={values.firstDate} onChange={handleInputChange} sx={{marginTop: 1}}/>}
+          {props.add && <FormTextField variant='outlined' label='Hire Date' name="hireDate" InputLabelProps={{shrink: true}} type='date' value={values.hireDate} onChange={handleInputChange} sx={{marginTop: 1}}/>}
+          <FormTextField variant='outlined' name="phoneNumber" label='Phone Number' value={values.phoneNumber} onChange={handleInputChange} sx={{marginTop: 1}}/>
+          <FormTextField variant='outlined' name="city" label='City' value={values.city} onChange={handleInputChange} sx={{marginTop: 1}}/>
+          <FormTextField variant='outlined' name="address" label='Address' value={values.address} onChange={handleInputChange} sx={{marginTop: 1}}/>
+          {props.add && <FormTextField variant='outlined' name="departmentID" label='Department ID' value={values.departmentID} onChange={handleInputChange} sx={{marginTop: 1}}/>}
           <Button onClick={handleUpdate} variant='contained' sx={{marginTop: 1, backgroundColor: '#0c2d64'}}>
             {props.add ? <div>Add Employee</div> : <div>Update Employee</div>}
           </Button>
@@ -149,8 +161,8 @@ const Form = (props) => {
       return (
         <Box sx={{top: '50%', left: '50%', width: 400, p: 2, boxShadow: 24, bgcolor: 'background.paper', display: 'flex', alignItems: 'center', 
           justifyContent: 'center', flexDirection: 'column'}}>
-            <TextField variant='outlined' name="buildingName" label='Building Name' value={values.buildingName} onChange={handleInputChange}/>
-            <TextField variant='outlined' name="address" label='Address' value={values.address} onChange={handleInputChange} sx={{marginTop: 1}}/>
+            <FormTextField variant='outlined' name="buildingName" label='Building Name' value={values.buildingName} onChange={handleInputChange}/>
+            <FormTextField variant='outlined' name="address" label='Address' value={values.address} onChange={handleInputChange} sx={{marginTop: 1}}/>
             <Button onClick={handleUpdate} variant='contained' sx={{marginTop: 1, backgroundColor: '#0c2d64'}}>
               {props.add ? <div>Add Building</div> : <div>Update Building</div>}
             </Button>
@@ -161,9 +173,12 @@ const Form = (props) => {
       return(
         <Box sx={{top: '50%', left: '50%', width: 400, p: 2, boxShadow: 24, bgcolor: 'background.paper', display: 'flex', alignItems: 'center', 
             justifyContent: 'center', flexDirection: 'column'}}>
-            <TextField variant='outlined' name="name" label='Ticket Name' value={values.name} onChange={handleInputChange}/>
-            <TextField variant='outlined' name="price" label='Ticket Price' value={values.price} onChange={handleInputChange} sx={{marginTop: 1}}/>
-            <TextField variant='outlined' name="periodic" label='Periodic' value={values.periodic} onChange={handleInputChange} sx={{marginTop: 1}}/>
+            <FormTextField variant='outlined' name="name" label='Ticket Name' type='text' value={values.name} onChange={handleInputChange}/>
+            <FormTextField variant='outlined' name="price" label='Ticket Price' type='number' value={values.price} onChange={handleInputChange} sx={{marginTop: 1}}/>
+            <div style={{display: 'flex', flexDirection: 'row'}}>
+                <div style={{marginTop: 7, marginRight: 5}}>Is Periodic</div>
+                <input name='periodic' id='periodic' type='checkbox' value={values.periodic} checked={values.periodic} onChange={handleInputChange} style={{marginTop: 13}}/>
+            </div>
             <Button onClick={handleUpdate} variant='contained' sx={{marginTop: 1, backgroundColor: '#0c2d64'}}>
               {props.add ? <div>Add Ticket</div> : <div>Update Ticket</div>}
             </Button>
@@ -174,12 +189,13 @@ const Form = (props) => {
       return(
         <Box sx={{top: '50%', left: '50%', width: 400, p: 2, boxShadow: 24, bgcolor: 'background.paper', display: 'flex', alignItems: 'center', 
             justifyContent: 'center', flexDirection: 'column'}}>
-            <TextField variant='outlined' name="airReadingDate" label='Air Reading Date' value={values.airReadingDate} onChange={handleInputChange}/>
-            <TextField variant='outlined' name="pm10" label='PM10' value={values.pm10} onChange={handleInputChange} sx={{marginTop: 1}}/>
-            <TextField variant='outlined' name="so2" label='SO2' value={values.so2} onChange={handleInputChange} sx={{marginTop: 1}}/>
-            <TextField variant='outlined' name="pm25" label='PM25' value={values.pm25} onChange={handleInputChange} sx={{marginTop: 1}}/>
-            <TextField variant='outlined' name="no2" label='NO2' value={values.no2} onChange={handleInputChange} sx={{marginTop: 1}}/>
-            <TextField variant='outlined' name="o3" label='O3' value={values.o3} onChange={handleInputChange} sx={{marginTop: 1}}/>
+            <FormTextField variant='outlined' name="airReadingDate" label='Air Reading Date' type='date' value={values.airReadingDate} onChange={handleInputChange}
+            InputLabelProps={{shrink: true}}/>
+            <FormTextField variant='outlined' name="pm10" label='PM10' value={values.pm10} type='number' onChange={handleInputChange} sx={{marginTop: 1}}/>
+            <FormTextField variant='outlined' name="so2" label='SO2' value={values.so2} type='number' onChange={handleInputChange} sx={{marginTop: 1}}/>
+            <FormTextField variant='outlined' name="pm25" label='PM25' value={values.pm25} type='number' onChange={handleInputChange} sx={{marginTop: 1}}/>
+            <FormTextField variant='outlined' name="no2" label='NO2' value={values.no2} type='number' onChange={handleInputChange} sx={{marginTop: 1}}/>
+            <FormTextField variant='outlined' name="o3" label='O3' value={values.o3} type='number' onChange={handleInputChange} sx={{marginTop: 1}}/>
             <Button onClick={handleUpdate} variant='contained' sx={{marginTop: 1, backgroundColor: '#0c2d64'}}>Add Air Reading</Button>
             {errors && [...errors].map((error, id) => <Alert variant='filled' severity='error' key={id} sx={{width: 142, marginTop: 1}}>{error}</Alert>)}
         </Box>
