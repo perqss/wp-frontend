@@ -11,44 +11,38 @@ const Form = (props) => {
   const [errors, setErrors] = useState<any>();
 
   useEffect(() => {
+    let it;
     if (!props.add) {
       let object = props.objectToUpdate;
-      if (props.query === 'employees') {
-        let employee = new Employee(object.employeeID, object.pesel, object.firstName, object.lastName, object.gender, object.birthDate, 
-        object.hireDate, object.phoneNumber, object.address, object.city, object.departmentID);
-        setValues(employee);
-      } else if (props.query === 'buildings') {
-        let building = new Building(object.buildingId, object.buildingName, object.address);
-        setValues(building);
-      } else if (props.query === 'tickets') {
-        console.log(object.periodic)
-        let ticket = new Ticket(object.ticketId, object.name, object.price, object.periodic);
-        setValues(ticket);
+      switch (props.query) {
+        case 'employees':
+          it = new Employee(object.employeeID, object.pesel, object.firstName, object.lastName, object.gender, object.birthDate,
+              object.hireDate, object.phoneNumber, object.address, object.city, object.departmentID);
+          break;
+        case 'buildings':
+          it = new Building(object.buildingId, object.buildingName, object.address);
+          break;
+        case 'tickets':
+          it = new Ticket(object.ticketId, object.name, object.price, object.periodic);
       }
     } else {
-      if (props.query === 'employees') {
-        let employee = new Employee();
-        setValues(employee);
-      } else if (props.query === 'buildings') {
-        let building = new Building();
-        setValues(building);
-      } else if (props.query === 'air readings') {
-        let airReading = new AirReading();
-        setValues(airReading);
-      } else if (props.query === 'tickets') {
-        let ticket = new Ticket();
-        setValues(ticket);
+      switch (props.query) {
+        case 'employees':
+          it = new Employee();
+          break;
+        case 'buildings':
+          it = new Building();
+          break;
+        case 'air readings':
+          it = new AirReading();
+          break;
+        case 'tickets':
+          it = new Ticket();
+          break;
       }
     }
+    setValues(it);
   }, [props.query]);
-
-  // useEffect(() => {
-  //   if (errors) {
-  //     console.log('nosz kurwa')
-  //     props.setValue(props.value + 1);
-  //   }
-  // }, [errors]);
-
 
   const handleUpdate = async () => {
     var url = `${process.env.REACT_APP_URL}/`;
@@ -60,8 +54,6 @@ const Form = (props) => {
         url += `/${props.objectToUpdate.buildingId}`;
       } else if (props.query === 'tickets') {
         url += `/${props.objectToUpdate.ticketId}`;
-        // var isTrueSet = (values.periodic === 'true');
-        // isTrueSet ? values.periodic = true : values.periodic = false;
       }
 
       await fetch(url, {
@@ -120,10 +112,6 @@ const Form = (props) => {
 
   const handleInputChange = (e) => {
     let {name, value, checked} = e.target;
-    // console.log(typeof value)
-    // console.log(e.target.checked)
-     //console.log(parseFloat(value))
-    // console.log(typeof value === 'string')
     if (name === 'periodic') {
       value = checked;
     } else if (!name.includes('Date') && value !== '' && !isNaN(parseFloat(value))) {
@@ -142,7 +130,14 @@ const Form = (props) => {
         <Box sx={{top: '50%', left: '50%', width: 400, p: 2, boxShadow: 24, bgcolor: 'background.paper', display: 'flex', alignItems: 'center', 
         justifyContent: 'center', flexDirection: 'column'}}>
           {props.add && <FormTextField variant='outlined' name="pesel" label='Pesel' type='number' value={values.pesel} onChange={handleInputChange}/>}
-          <FormTextField variant='outlined' name="firstName" label='First Name' type='text' value={values.firstName} onChange={handleInputChange}/>
+          <FormTextField
+              variant='outlined'
+              name="firstName"
+              label='First Name'
+              type='text'
+              value={values.firstName}
+              onChange={handleInputChange}
+          />
           <FormTextField variant='outlined' name="lastName" label='Last Name' type='text' value={values.lastName} onChange={handleInputChange} sx={{marginTop: 1}}/>
           <FormTextField variant='outlined' name="gender" label='Gender' type='text' value={values.gender} onChange={handleInputChange} sx={{marginTop: 1}}/>
           {props.add && <FormTextField variant='outlined' label='Birth Date' name="birthDate" InputLabelProps={{shrink: true}} type='date' value={values.firstDate} onChange={handleInputChange} sx={{marginTop: 1}}/>}
