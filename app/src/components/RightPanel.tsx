@@ -36,7 +36,7 @@ const RightPanel = (props) => {
       fetch(url)
       .then(result => result.json())
       .then(data => {
-        setData(data)
+        setData(data);
         setColumnDefs(props.columnDefs);
         setIsShown(false);
       })
@@ -44,6 +44,7 @@ const RightPanel = (props) => {
 
   const onRowSelected = () => {
     var selectedRows = gridRef.current.api.getSelectedRows();
+    console.log(selectedRows[0])
     setDetails(selectedRows[0]);
     setIsShown(true);
   };

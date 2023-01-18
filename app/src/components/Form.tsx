@@ -42,17 +42,10 @@ const Form = (props) => {
     }
   }, [props.query]);
 
-  // useEffect(() => {
-  //   if (errors) {
-  //     console.log('nosz kurwa')
-  //     props.setValue(props.value + 1);
-  //   }
-  // }, [errors]);
-
-
   const handleUpdate = async () => {
     var url = `${process.env.REACT_APP_URL}/`;
     props.query === 'air readings' ? url += 'airReadings' : url += `${props.query}`;
+    console.log(values)
     if (!props.add) {
       if (props.query === 'employees') {
         url += `/${props.objectToUpdate.employeeID}`;
@@ -60,8 +53,6 @@ const Form = (props) => {
         url += `/${props.objectToUpdate.buildingId}`;
       } else if (props.query === 'tickets') {
         url += `/${props.objectToUpdate.ticketId}`;
-        // var isTrueSet = (values.periodic === 'true');
-        // isTrueSet ? values.periodic = true : values.periodic = false;
       }
 
       await fetch(url, {
@@ -120,10 +111,7 @@ const Form = (props) => {
 
   const handleInputChange = (e) => {
     let {name, value, checked} = e.target;
-    // console.log(typeof value)
-    // console.log(e.target.checked)
-     //console.log(parseFloat(value))
-    // console.log(typeof value === 'string')
+
     if (name === 'periodic') {
       value = checked;
     } else if (!name.includes('Date') && value !== '' && !isNaN(parseFloat(value))) {
@@ -191,11 +179,11 @@ const Form = (props) => {
             justifyContent: 'center', flexDirection: 'column'}}>
             <FormTextField variant='outlined' name="airReadingDate" label='Air Reading Date' type='date' value={values.airReadingDate} onChange={handleInputChange}
             InputLabelProps={{shrink: true}}/>
-            <FormTextField variant='outlined' name="pm10" label='PM10' value={values.pm10} type='number' onChange={handleInputChange} sx={{marginTop: 1}}/>
-            <FormTextField variant='outlined' name="so2" label='SO2' value={values.so2} type='number' onChange={handleInputChange} sx={{marginTop: 1}}/>
-            <FormTextField variant='outlined' name="pm25" label='PM25' value={values.pm25} type='number' onChange={handleInputChange} sx={{marginTop: 1}}/>
-            <FormTextField variant='outlined' name="no2" label='NO2' value={values.no2} type='number' onChange={handleInputChange} sx={{marginTop: 1}}/>
-            <FormTextField variant='outlined' name="o3" label='O3' value={values.o3} type='number' onChange={handleInputChange} sx={{marginTop: 1}}/>
+            <FormTextField variant='outlined' name="PM10" label='PM10' value={values.pm10} type='number' onChange={handleInputChange} sx={{marginTop: 1}}/>
+            <FormTextField variant='outlined' name="SO2" label='SO2' value={values.so2} type='number' onChange={handleInputChange} sx={{marginTop: 1}}/>
+            <FormTextField variant='outlined' name="PM25" label='PM25' value={values.pm25} type='number' onChange={handleInputChange} sx={{marginTop: 1}}/>
+            <FormTextField variant='outlined' name="NO2" label='NO2' value={values.no2} type='number' onChange={handleInputChange} sx={{marginTop: 1}}/>
+            <FormTextField variant='outlined' name="O3" label='O3' value={values.o3} type='number' onChange={handleInputChange} sx={{marginTop: 1}}/>
             <Button onClick={handleUpdate} variant='contained' sx={{marginTop: 1, backgroundColor: '#0c2d64'}}>Add Air Reading</Button>
             {errors && [...errors].map((error, id) => <Alert variant='filled' severity='error' key={id} sx={{width: 142, marginTop: 1}}>{error}</Alert>)}
         </Box>
