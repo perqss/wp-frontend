@@ -44,7 +44,6 @@ const RightPanel = (props) => {
 
   const onRowSelected = () => {
     var selectedRows = gridRef.current.api.getSelectedRows();
-    console.log(selectedRows[0])
     setDetails(selectedRows[0]);
     setIsShown(true);
   };
@@ -67,16 +66,40 @@ const RightPanel = (props) => {
         />
       </div>  
       }
-      {isShown && <ItemInfo details={details} setDetails={setDetails} query={props.query} setIsShown={setIsShown} value={props.value} setValue={props.setValue} 
-      setOpenUpdateSnackbar={setOpenUpdateSnackbar} setSnackbarUpdateMessage={setSnackbarUpdateMessage} setOpenDeleteSnackbar={setOpenDeleteSnackbar}
-      setSnackbarDeleteMessage={setSnackbarDeleteMessage}/>}
-      <Snackbar open={openUpdateSnackbar} autoHideDuration={2000} onClose={() => setOpenUpdateSnackbar(false)}>
-          <Alert onClose={() => setOpenUpdateSnackbar(false)} severity='success' variant='filled'> 
+      {isShown && <ItemInfo
+          details={details}
+          setDetails={setDetails}
+          query={props.query}
+          setIsShown={setIsShown}
+          value={props.value}
+          setValue={props.setValue}
+          setOpenUpdateSnackbar={setOpenUpdateSnackbar}
+          setSnackbarUpdateMessage={setSnackbarUpdateMessage}
+          setOpenDeleteSnackbar={setOpenDeleteSnackbar}
+          setSnackbarDeleteMessage={setSnackbarDeleteMessage}
+      />
+      }
+      <Snackbar
+          open={openUpdateSnackbar}
+          autoHideDuration={2000}
+          onClose={() => setOpenUpdateSnackbar(false)}
+      >
+        <Alert
+            onClose={() => setOpenUpdateSnackbar(false)}
+            severity='success'
+            variant='filled'>
                 {snackbarUpdateMessage}
           </Alert>
       </Snackbar>
-      <Snackbar open={openDeleteSnackbar} autoHideDuration={2000} onClose={() => setOpenDeleteSnackbar(false)}>
-          <Alert onClose={() => setOpenDeleteSnackbar(false)} severity='success' variant='filled'> 
+      <Snackbar
+          open={openDeleteSnackbar}
+          autoHideDuration={2000}
+          onClose={() => setOpenDeleteSnackbar(false)}
+      >
+          <Alert
+              onClose={() => setOpenDeleteSnackbar(false)}
+              severity='success'
+              variant='filled'>
                 {snackbarDeleteMessage}
           </Alert>
       </Snackbar>

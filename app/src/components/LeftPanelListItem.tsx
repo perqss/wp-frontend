@@ -132,8 +132,15 @@ const LeftPanelListItem = (props) => {
         <div>
             <Dialog open={addFormOpen} onClose={() => setAddFormOpen(false)}>
                 <DialogTitle>Add</DialogTitle>
-                <Form query={text} setAddFormOpen={setAddFormOpen} value={props.value} setValue={props.setValue}
-                setOpenAddSnackbar={setOpenAddSnackbar} setSnackbarAddMessage={setSnackbarAddMessage} add/>
+                <Form
+                    query={text}
+                    setAddFormOpen={setAddFormOpen}
+                    value={props.value}
+                    setValue={props.setValue}
+                    setOpenAddSnackbar={setOpenAddSnackbar}
+                    setSnackbarAddMessage={setSnackbarAddMessage}
+                    add
+                />
             </Dialog>
             <ListItem disablePadding>
                 <ListItemButton 
@@ -151,19 +158,32 @@ const LeftPanelListItem = (props) => {
                         }
                     }}>
                     {renderIcons()}
-                    <ListItemText primary={props.text} primaryTypographyProps={{fontSize: 'large', color: 'white'}}/>
+                    <ListItemText
+                        primary={props.text}
+                        primaryTypographyProps={{fontSize: 'large', color: 'white'}}/>
                 </ListItemButton>
                 {addableFields.includes(props.text) &&
-                    <Tooltip title={`Add new ${props.text.toLowerCase().substr(0, props.text.length - 1)} to database`} placement='right'>
+                    <Tooltip
+                        title={`Add new ${props.text.toLowerCase().substr(0, props.text.length - 1)} to database`}
+                        placement='right'
+                    >
                         <IconButton onClick={handleClickAdd}>
                             <AddIcon sx={{color: 'white'}}/>
                         </IconButton>
                     </Tooltip>
                 }  
             </ListItem>
-            <Snackbar open={openAddSnackbar} autoHideDuration={2000} onClose={() => setOpenAddSnackbar(false)}>
-                <Alert onClose={() => setOpenAddSnackbar(false)} severity='success' variant='filled'> 
-                        {snackbarAddMessage}
+            <Snackbar
+                open={openAddSnackbar}
+                autoHideDuration={2000}
+                onClose={() => setOpenAddSnackbar(false)}
+            >
+                <Alert
+                    onClose={() => setOpenAddSnackbar(false)}
+                    severity='success'
+                    variant='filled'
+                >
+                    {snackbarAddMessage}
                 </Alert>
             </Snackbar>
         </div>

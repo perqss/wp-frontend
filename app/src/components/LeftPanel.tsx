@@ -22,17 +22,34 @@ const LeftPanel = () => {
         <div style={{width: '100vw', height: '100vh'}}>
             <Box sx={{display: 'flex', flexDirection: 'row'}}>
                 <Box sx={{ width: 200, height: '100vh', display: 'flex', flexDirection: 'column', position: 'fixed'}}>
-                    <List sx={{backgroundColor: color}}>
+                    <List
+                        sx={{backgroundColor: color}}>
                         {items.map((item, index) => 
-                            <LeftPanelListItem key={item} text={item} index={index} open={open} setOpen={setOpen} 
-                            query={query} columnDefs={columnDefs} setColumnDefs={setColumnDefs} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex}
-                            value={value} setValue={setValue}/>
+                            <LeftPanelListItem
+                                key={item}
+                                text={item}
+                                index={index}
+                                open={open}
+                                setOpen={setOpen}
+                                query={query}
+                                columnDefs={columnDefs}
+                                setColumnDefs={setColumnDefs}
+                                selectedIndex={selectedIndex}
+                                setSelectedIndex={setSelectedIndex}
+                                value={value}
+                                setValue={setValue}/>
                         )}
                     </List>
                     <div style={{backgroundColor: color, height: '100%'}}/>
                 </Box>
-
-                {open ? <RightPanel className='right-panel' query={query.current} columnDefs={columnDefs} value={value} setValue={setValue}/> : ''}
+                {open ? <RightPanel
+                    className='right-panel'
+                    query={query.current}
+                    columnDefs={columnDefs}
+                    value={value}
+                    setValue={setValue}
+                    />
+                    : ''}
             </Box>
         </div>
         );

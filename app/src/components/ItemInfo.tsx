@@ -9,8 +9,8 @@ import Logger from '../logger/Logger';
 
 const ItemInfo = (props) => {
     const logger = Logger.getInstance();
-    console.log(props.details)
     logger.log(`Object sent to ItemInfo: ${JSON.stringify(props.details)}`);
+
     const [holidayData, setHolidayData] = useState();
     const [holidayColumnDefs, setHolidayColumnDefs] = useState<any>();
     const [updateFormOpen, setUpdateFormOpen] = useState(false);
@@ -123,7 +123,6 @@ const ItemInfo = (props) => {
                 {field: 'stopName'},
             ])
         } else if (props.query === 'vehicles') {
-            console.log(props.details.repairHistory)
             setRepairsData(props.details.repairHistory);
             setRepairsColumnDefs([
                 {field: 'dateFrom'},
@@ -149,14 +148,19 @@ const ItemInfo = (props) => {
         }
       };
 
-      console.log(props.details)
-
     return (
     <Box sx={{flex: 6, marginLeft: 10}}>
         <Dialog open={updateFormOpen} onClose={() => setUpdateFormOpen(false)}>
             <DialogTitle>Update</DialogTitle>
-            <Form query={props.query} setUpdateFormOpen={setUpdateFormOpen} objectToUpdate={props.details} value={props.value} setValue={props.setValue}
-            setOpenUpdateSnackbar={props.setOpenUpdateSnackbar} setSnackbarUpdateMessage={props.setSnackbarUpdateMessage}/>
+            <Form
+                query={props.query}
+                setUpdateFormOpen={setUpdateFormOpen}
+                objectToUpdate={props.details}
+                value={props.value}
+                setValue={props.setValue}
+                setOpenUpdateSnackbar={props.setOpenUpdateSnackbar}
+                setSnackbarUpdateMessage={props.setSnackbarUpdateMessage}
+            />
         </Dialog>
         <Typography variant='h6' gutterBottom sx={{marginTop: 0.6, color: '#0c2d64'}}>
             Details
