@@ -24,6 +24,7 @@ const Form = (props) => {
           break;
         case 'tickets':
           it = new Ticket(object.ticketId, object.name, object.price, object.periodic);
+          break;
       }
     } else {
       switch (props.query) {
