@@ -9,11 +9,6 @@ import {FormTextField, FormBox, FormButton, StyledAlert} from './MaterialCompone
 const Form = (props) => {
   const [values, setValues] = useState<any>();
   const [errors, setErrors] = useState<any>();
-  const [openWarning, setOpenWarning] = useState(false);
-
-  const handleClose = () => {
-    setOpenWarning(false);
-  };
 
   useEffect(() => {
     let it;
@@ -129,7 +124,6 @@ const Form = (props) => {
       ...values,
       [name]: value,
     });
-    console.log(values)
   };
 
   const renderFields = () => {
@@ -395,14 +389,6 @@ const Form = (props) => {
             >
               Add Air Reading
             </FormButton>
-            {openWarning &&
-              <StyledAlert 
-                severity='warning'
-                variant='filled'
-              >
-                  Use commas instead of dots
-                </StyledAlert>
-            }
             {errors && [...errors].map((error, id) =>
                 <StyledAlert
                   variant='filled'
