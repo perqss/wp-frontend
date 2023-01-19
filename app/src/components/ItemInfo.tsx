@@ -6,6 +6,7 @@ import 'ag-grid-community/dist/styles/ag-theme-material.css';
 import Form from './Form';
 import { Button, Dialog, IconButton, Typography, Tooltip, Box, Paper, Grid, DialogTitle, Snackbar, Alert } from '@mui/material';
 import Logger from '../logger/Logger';
+import { ItemInfoButton } from './MaterialComponentsCss';
 
 const ItemInfo = (props) => {
     const logger = Logger.getInstance();
@@ -86,21 +87,21 @@ const ItemInfo = (props) => {
     const renderUpdateButtons = () => {
         if (props.query === 'employees') {
             return (
-                <Button variant='contained' sx={{marginTop: 5, backgroundColor: '#0c2d64'}} onClick={handleUpdate}>
+                <ItemInfoButton variant='contained' onClick={handleUpdate}>
                     Update Employee
-                </Button>
+                </ItemInfoButton>
             );
         } else if (props.query === 'buildings') {
             return (
-                <Button variant='contained' sx={{marginTop: 5, backgroundColor: '#0c2d64'}} onClick={handleUpdate}>
+                <ItemInfoButton variant='contained' onClick={handleUpdate}>
                     Update Building
-                </Button>
+                </ItemInfoButton>
             );
         } else if (props.query === 'tickets') {
             return (
-                <Button variant='contained' sx={{marginTop: 5, backgroundColor: '#0c2d64'}} onClick={handleUpdate}>
+                <ItemInfoButton variant='contained' onClick={handleUpdate}>
                     Update Ticket
-                </Button>
+                </ItemInfoButton>
             ); 
         }
     };
@@ -148,6 +149,16 @@ const ItemInfo = (props) => {
         }
       };
 
+      const parseObjectValue = (value) => {
+        if (value === 'false') {
+            return 'No';
+        } else if (value === 'true') {
+            return 'Yes';
+        } else {
+            return value;
+        }
+      } 
+
     return (
     <Box sx={{flex: 6, marginLeft: 10}}>
         <Dialog open={updateFormOpen} onClose={() => setUpdateFormOpen(false)}>
@@ -171,7 +182,7 @@ const ItemInfo = (props) => {
                     return (
                     <Grid item key={key}>
                         <Paper elevation={1} key={key}>
-                            {camelToTitle(key)}: {`${props.details[key]}`}
+                            {camelToTitle(key)}: {parseObjectValue(`${props.details[key]}`)}
                         </Paper>
                     </Grid>
                     );

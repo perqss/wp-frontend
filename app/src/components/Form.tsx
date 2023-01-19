@@ -4,7 +4,7 @@ import Building from '../models/Building';
 import Ticket from '../models/Ticket';
 import AirReading from '../models/AirReading';
 import { Alert, Box, Button, TextField, Grid } from '@mui/material';
-import FormTextField from './FormTextField';
+import {FormTextField, FormBox, FormButton, StyledAlert} from './MaterialComponentsCss';
 
 const Form = (props) => {
   const [values, setValues] = useState<any>();
@@ -112,13 +112,15 @@ const Form = (props) => {
   };
 
   const handleInputChange = (e) => {
-    let {name, value, checked} = e.target;
+    let {name, value, checked, type} = e.target;
+
+    console.log(value)
 
     if (name === 'periodic') {
       value = checked;
-    } else if (!name.includes('Date') && value !== '' && !isNaN(parseFloat(value))) {
+    } else if (type === 'number') {
       value = parseFloat(value);
-    }
+    } 
 
     setValues({
       ...values,
@@ -126,11 +128,11 @@ const Form = (props) => {
     });
   };
 
+
   const renderFields = () => {
     if (props.query === 'employees') {
       return (
-        <Box sx={{top: '50%', left: '50%', width: 400, p: 2, boxShadow: 24, bgcolor: 'background.paper', display: 'flex', alignItems: 'center',
-        justifyContent: 'center', flexDirection: 'column'}}>
+        <FormBox>
           {props.add &&
               <FormTextField
                   variant='outlined'
@@ -155,7 +157,6 @@ const Form = (props) => {
               type='text'
               value={values.lastName}
               onChange={handleInputChange}
-              sx={{marginTop: 1}}
           />
           <FormTextField
               variant='outlined'
@@ -164,7 +165,6 @@ const Form = (props) => {
               type='text'
               value={values.gender}
               onChange={handleInputChange}
-              sx={{marginTop: 1}}
           />
           {props.add &&
               <FormTextField
@@ -175,7 +175,6 @@ const Form = (props) => {
                   type='date'
                   value={values.firstDate}
                   onChange={handleInputChange}
-                  sx={{marginTop: 1}}
               />
           }
           {props.add &&
@@ -186,7 +185,6 @@ const Form = (props) => {
                   InputLabelProps={{shrink: true}}
                   type='date' value={values.hireDate}
                   onChange={handleInputChange}
-                  sx={{marginTop: 1}}
               />
           }
           <FormTextField
@@ -195,7 +193,6 @@ const Form = (props) => {
               label='Phone Number'
               value={values.phoneNumber}
               onChange={handleInputChange}
-              sx={{marginTop: 1}}
           />
           <FormTextField
               variant='outlined'
@@ -203,7 +200,6 @@ const Form = (props) => {
               label='City'
               value={values.city}
               onChange={handleInputChange}
-              sx={{marginTop: 1}}
           />
           <FormTextField
               variant='outlined'
@@ -211,7 +207,6 @@ const Form = (props) => {
               label='Address'
               value={values.address}
               onChange={handleInputChange}
-              sx={{marginTop: 1}}
           />
           {props.add &&
               <FormTextField
@@ -220,32 +215,28 @@ const Form = (props) => {
                   label='Department ID'
                   value={values.departmentID}
                   onChange={handleInputChange}
-                  sx={{marginTop: 1}}
               />
           }
-          <Button
+          <FormButton
               onClick={handleUpdate}
               variant='contained'
-              sx={{marginTop: 1, backgroundColor: '#0c2d64'}}
           >
             {props.add ? <div>Add Employee</div> : <div>Update Employee</div>}
-          </Button>
+          </FormButton>
           {errors && [...errors].map((error, id) =>
-              <Alert
+              <StyledAlert
                   variant='filled'
                   severity='error'
                   key={id}
-                  sx={{width: 142, marginTop: 1}}
               >
                 {error}
-              </Alert>
+              </StyledAlert>
           )}
-        </Box>
+        </FormBox>
       );
     } else if (props.query === 'buildings') {
       return (
-        <Box sx={{top: '50%', left: '50%', width: 400, p: 2, boxShadow: 24, bgcolor: 'background.paper', display: 'flex', alignItems: 'center', 
-          justifyContent: 'center', flexDirection: 'column'}}>
+        <FormBox>
             <FormTextField
                 variant='outlined'
                 name="buildingName"
@@ -259,31 +250,27 @@ const Form = (props) => {
                 label='Address'
                 value={values.address}
                 onChange={handleInputChange}
-                sx={{marginTop: 1}}
             />
-            <Button
+            <FormButton
                 onClick={handleUpdate}
                 variant='contained'
-                sx={{marginTop: 1, backgroundColor: '#0c2d64'}}
             >
               {props.add ? <div>Add Building</div> : <div>Update Building</div>}
-            </Button>
+            </FormButton>
             {errors && [...errors].map((error, id) =>
-                <Alert
+                <StyledAlert
                     variant='filled'
                     severity='error'
                     key={id}
-                    sx={{width: 142, marginTop: 1}}
                 >
                   {error}
-                </Alert>
+                </StyledAlert>
             )}
-        </Box>
+        </FormBox>
       );
     } else if (props.query === 'tickets') {
       return(
-        <Box sx={{top: '50%', left: '50%', width: 400, p: 2, boxShadow: 24, bgcolor: 'background.paper', display: 'flex', alignItems: 'center', 
-            justifyContent: 'center', flexDirection: 'column'}}>
+        <FormBox>
             <FormTextField
                 variant='outlined'
                 name="name"
@@ -297,9 +284,11 @@ const Form = (props) => {
                 name="price"
                 label='Ticket Price'
                 type='number'
+                inputProps={{
+                  step: '0.01'
+                }}
                 value={values.price}
                 onChange={handleInputChange}
-                sx={{marginTop: 1}}
             />
             <div style={{display: 'flex', flexDirection: 'row'}}>
                 <div style={{marginTop: 7, marginRight: 5}}>Is Periodic</div>
@@ -313,29 +302,26 @@ const Form = (props) => {
                     style={{marginTop: 13}}
                 />
             </div>
-            <Button
+            <FormButton
                 onClick={handleUpdate}
                 variant='contained'
-                sx={{marginTop: 1, backgroundColor: '#0c2d64'}}
             >
               {props.add ? <div>Add Ticket</div> : <div>Update Ticket</div>}
-            </Button>
+            </FormButton>
             {errors && [...errors].map((error, id) =>
-                <Alert
+                <StyledAlert
                     variant='filled'
                     severity='error'
                     key={id}
-                    sx={{width: 142, marginTop: 1}}
                 >
                   {error}
-                </Alert>
+                </StyledAlert>
             )}
-        </Box>
+        </FormBox>
       );
     } else if (props.query === 'air readings') {
       return(
-        <Box sx={{top: '50%', left: '50%', width: 400, p: 2, boxShadow: 24, bgcolor: 'background.paper', display: 'flex', alignItems: 'center', 
-            justifyContent: 'center', flexDirection: 'column'}}>
+        <FormBox>
             <FormTextField
                 variant='outlined'
                 name="airReadingDate"
@@ -349,65 +335,73 @@ const Form = (props) => {
                 variant='outlined'
                 name="PM10"
                 label='PM10'
-                value={values.pm10}
+                value={values.PM10}
                 type='number'
+                inputProps={{
+                  step: 'any'
+                }}
                 onChange={handleInputChange}
-                sx={{marginTop: 1}}
             />
             <FormTextField
                 variant='outlined'
                 name="SO2"
                 label='SO2'
-                value={values.so2}
+                value={values.SO2}
                 type='number'
+                inputProps={{
+                  step: 'any'
+                }}
                 onChange={handleInputChange}
-                sx={{marginTop: 1}}
             />
             <FormTextField
                 variant='outlined'
                 name="PM25"
                 label='PM25'
-                value={values.pm25}
+                value={values.PM5}
                 type='number'
+                inputProps={{
+                  step: 'any'
+                }}
                 onChange={handleInputChange}
-                sx={{marginTop: 1}}
             />
             <FormTextField
                 variant='outlined'
                 name="NO2"
                 label='NO2'
-                value={values.no2}
+                value={values.NO2}
                 type='number'
+                inputProps={{
+                  step: 'any'
+                }}
                 onChange={handleInputChange}
-                sx={{marginTop: 1}}
             />
             <FormTextField
                 variant='outlined'
                 name="O3"
                 label='O3'
-                value={values.o3}
+                value={values.O3}
                 type='number'
+                inputProps={{
+                  step: 'any'
+                }}
                 onChange={handleInputChange}
-                sx={{marginTop: 1}}
             />
-            <Button
+            <FormButton
                 onClick={handleUpdate}
                 variant='contained'
-                sx={{marginTop: 1, backgroundColor: '#0c2d64'}}
             >
               Add Air Reading
-            </Button>
+            </FormButton>
             {errors && [...errors].map((error, id) =>
-                <Alert
+                <StyledAlert
                     variant='filled'
                     severity='error'
                     key={id}
-                    sx={{width: 142, marginTop: 1}}
                 >
                   {error}
-                </Alert>
+                </StyledAlert>
             )}
-        </Box>
+        </FormBox>
       );
     }
   };
