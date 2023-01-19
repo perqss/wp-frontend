@@ -114,8 +114,6 @@ const Form = (props) => {
   const handleInputChange = (e) => {
     let {name, value, checked, type} = e.target;
 
-    console.log(value)
-
     if (name === 'periodic') {
       value = checked;
     } else if (type === 'number') {
@@ -127,7 +125,6 @@ const Form = (props) => {
       [name]: value,
     });
   };
-
 
   const renderFields = () => {
     if (props.query === 'employees') {
