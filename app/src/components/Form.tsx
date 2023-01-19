@@ -3,12 +3,17 @@ import Employee from '../models/Employee';
 import Building from '../models/Building';
 import Ticket from '../models/Ticket';
 import AirReading from '../models/AirReading';
-import { Alert, Box, Button, TextField, Grid } from '@mui/material';
+import { Alert, Box, Button, TextField, Grid, Snackbar } from '@mui/material';
 import {FormTextField, FormBox, FormButton, StyledAlert} from './MaterialComponentsCss';
 
 const Form = (props) => {
   const [values, setValues] = useState<any>();
   const [errors, setErrors] = useState<any>();
+  const [openWarning, setOpenWarning] = useState(false);
+
+  const handleClose = () => {
+    setOpenWarning(false);
+  };
 
   useEffect(() => {
     let it;
@@ -116,7 +121,7 @@ const Form = (props) => {
 
     if (name === 'periodic') {
       value = checked;
-    } else if (type === 'number') {
+    } else if (type === 'number' && value !== '') {
       value = parseFloat(value);
     } 
 
@@ -124,6 +129,7 @@ const Form = (props) => {
       ...values,
       [name]: value,
     });
+    console.log(values)
   };
 
   const renderFields = () => {
@@ -354,7 +360,7 @@ const Form = (props) => {
                 variant='outlined'
                 name="PM25"
                 label='PM25'
-                value={values.PM5}
+                value={values.PM25}
                 type='number'
                 inputProps={{
                   step: 'any'
@@ -389,11 +395,19 @@ const Form = (props) => {
             >
               Add Air Reading
             </FormButton>
+            {openWarning &&
+              <StyledAlert 
+                severity='warning'
+                variant='filled'
+              >
+                  Use commas instead of dots
+                </StyledAlert>
+            }
             {errors && [...errors].map((error, id) =>
                 <StyledAlert
-                    variant='filled'
-                    severity='error'
-                    key={id}
+                  variant='filled'
+                  severity='error'
+                  key={id}
                 >
                   {error}
                 </StyledAlert>
