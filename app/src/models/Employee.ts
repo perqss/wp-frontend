@@ -13,7 +13,7 @@ class Employee {
 
     constructor(employeeID?: any, pesel?: string, firstName?: string, lastName?: string, gender?: string, birthDate?: string, hireDate?: string, phoneNumber?: string, 
         address?: string, city?: string, departmentID?: any) {
-        this.employeeID = employeeID ?? '';
+        this.employeeID = employeeID ?? 1;
         this.pesel = pesel ?? '';
         this.firstName = firstName ?? '';
         this.lastName = lastName ?? '';

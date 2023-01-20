@@ -5,7 +5,7 @@ class Ticket {
     periodic: any;
 
     constructor(ticketId?: any, name?: string, price?: any, periodic?: any) {
-        this.tickedId = ticketId ?? '';
+        this.tickedId = ticketId ?? 1;
         this.name = name ?? '';
         this.price = price ?? '';
         this.periodic = periodic ?? false;
