@@ -18,37 +18,25 @@ const Form = (props) => {
   const [errors, setErrors] = useState<any>();
 
   useEffect(() => {
-    let it;
-    if (!props.add) {
-      let object = props.objectToUpdate;
+      let it;
+      const object = props.objectToUpdate;
+
       switch (props.query as CategoryEnum) {
         case CategoryEnum.Employees:
-          it = new Employee(object.employeeID, object.pesel, object.firstName, object.lastName, object.gender, object.birthDate,
-              object.hireDate, object.phoneNumber, object.address, object.city, object.departmentID);
+          it = props.add ? new Employee()
+              : new Employee(object.employeeID, object.pesel, object.firstName, object.lastName, object.gender,
+                  object.birthDate, object.hireDate, object.phoneNumber, object.address, object.city, object.departmentID);
           break;
         case CategoryEnum.Buildings:
-          it = new Building(object.buildingId, object.buildingName, object.address);
+          it = props.add ? new Building() :
+              new Building(object.buildingId, object.buildingName, object.address);
           break;
         case CategoryEnum.Tickets:
-          it = new Ticket(object.ticketId, object.name, object.price, object.periodic);
+          it = props.add ? new Ticket() :
+              new Ticket(object.ticketId, object.name, object.price, object.periodic);
           break;
       }
-    } else {
-      switch (props.query as CategoryEnum) {
-        case CategoryEnum.Employees:
-          it = new Employee();
-          break;
-        case CategoryEnum.Buildings:
-          it = new Building();
-          break;
-        case CategoryEnum.AirReadings:
-          it = new AirReading();
-          break;
-        case CategoryEnum.Tickets:
-          it = new Ticket();
-          break;
-      }
-    }
+
     setValues(it);
   }, [props.query]);
 
