@@ -20,6 +20,6 @@ class Logger {
         );
         console.log(`${timestamp} - ${message}`);
     };
-};
+}
 
 export default Logger;

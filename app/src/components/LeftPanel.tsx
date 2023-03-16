@@ -3,16 +3,11 @@ import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import LeftPanelListItem from './LeftPanelListItem';
 import RightPanel from './RightPanel';
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import Button from '@mui/material/Button';
-import { IconButton } from '@mui/material';
 
 const LeftPanel = () => {
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState(0);
     const query = useRef();
-    const gridRef = useRef<any>(null);
     const [columnDefs, setColumnDefs] = useState([]);
     const items = ['Employees', 'Air Readings', 'Buildings', 'Tickets', 'Vehicles', 'Tram Lines', 'Bus Lines', 'Stops'];
     const [selectedIndex, setSelectedIndex] = useState<number>();
