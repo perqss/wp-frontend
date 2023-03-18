@@ -2,16 +2,10 @@ import React, {useEffect, useState} from 'react';
 import Employee from '../models/Employee';
 import Building from '../models/Building';
 import Ticket from '../models/Ticket';
-import AirReading from '../models/AirReading';
 import {FormBox, FormButton, FormTextField, StyledAlert} from './MaterialComponentsCss';
-
-export enum CategoryEnum {
-    AirReadings = 'air readings',
-    Buildings = 'buildings',
-    Employees = 'employees',
-    Stops = 'stops',
-    Tickets = 'tickets'
-}
+import {CategoryEnum} from "./LeftPanel";
+import AirReading from "../models/AirReading";
+import {addAirReading} from "../clients/AirReadingsClient";
 
 const Form = (props) => {
   const [values, setValues] = useState<any>();
@@ -20,7 +14,6 @@ const Form = (props) => {
   useEffect(() => {
       let it;
       const object = props.objectToUpdate;
-
       switch (props.query as CategoryEnum) {
         case CategoryEnum.Employees:
           it = props.add ? new Employee()
@@ -35,14 +28,18 @@ const Form = (props) => {
           it = props.add ? new Ticket() :
               new Ticket(object.ticketId, object.name, object.price, object.periodic);
           break;
+          case CategoryEnum.AirReadings:
+              it = props.add ? new AirReading() :
+                  new AirReading(object.airReadingDate, object.PM10, object.SO2, object.PM25, object.NO2, object.O3);
+              break;
       }
-
     setValues(it);
   }, [props.query]);
 
   const handleUpdate = async () => {
-    var url = `${process.env.REACT_APP_URL}/`;
-    props.query === 'air readings' ? url += 'airReadings' : url += `${props.query}`;
+     var url = `${process.env.REACT_APP_URL}/`;
+    // props.query === 'air readings' ? url += 'airReadings' : url += `${props.query}`;
+      console.log(props.add)
     if (!props.add) {
       if (props.query === 'employees') {
         url += `/${props.objectToUpdate.employeeID}`;
@@ -77,32 +74,41 @@ const Form = (props) => {
           props.setValue(props.value + 1);
         }
       });
-    } else {
-      await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(values),
-      })
-      .then(response => {
-        if (response.status < 200 || response.status > 299) {
-          return response.json();
-        } else {
-          props.setOpenAddSnackbar(true);
-          props.setSnackbarAddMessage(`Successfully added ${props.query.substr(0, props.query.length - 1)}`);
-          props.setAddFormOpen(false);
-          return null;
-        }
-      })
-      .then(responseErrors => {
-        if (responseErrors) {
-          setErrors(new Set(responseErrors))
-        } else {
-          props.setValue(props.value + 1);
-        }
-      })
+    }
+
+    else {
+        addAirReading(values).then(response => {
+                props.setOpenAddSnackbar(true);
+                props.setSnackbarAddMessage(`Successfully added ${props.query.substr(0, props.query.length - 1)}`);
+                props.setAddFormOpen(false);
+                return null;
+              })
+
+      // await fetch(url, {
+      //   method: 'POST',
+      //   headers: {
+      //     'Accept': 'application/json',
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify(values),
+      // })
+      // .then(response => {
+      //   if (response.status < 200 || response.status > 299) {
+      //     return response.json();
+      //   } else {
+      //     props.setOpenAddSnackbar(true);
+      //     props.setSnackbarAddMessage(`Successfully added ${props.query.substr(0, props.query.length - 1)}`);
+      //     props.setAddFormOpen(false);
+      //     return null;
+      //   }
+      // })
+      // .then(responseErrors => {
+      //   if (responseErrors) {
+      //     setErrors(new Set(responseErrors))
+      //   } else {
+      //     props.setValue(props.value + 1);
+      //   }
+      // })
     }
   };
 
@@ -133,9 +139,9 @@ const Form = (props) => {
       )
   }
 
-
   const renderFields = () => {
-      switch (props.query as CategoryEnum) {
+      console.log(props.query)
+      switch (props.query) {
           case CategoryEnum.AirReadings:
               return (
                   <FormBox>

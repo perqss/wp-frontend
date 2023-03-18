@@ -4,12 +4,22 @@ import List from '@mui/material/List';
 import LeftPanelListItem from './LeftPanelListItem';
 import RightPanel from './RightPanel';
 
+export enum CategoryEnum {
+    AirReadings = 'Air Readings',
+    Buildings = 'Buildings',
+    BusLines = 'Bus Lines',
+    Employees = 'Employees',
+    Stops = 'Stops',
+    Tickets = 'Tickets',
+    TramLines = 'Tram Lines',
+    Vehicles = 'Vehicles',
+}
+
 const LeftPanel = () => {
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState(0);
     const query = useRef();
     const [columnDefs, setColumnDefs] = useState([]);
-    const items = ['Employees', 'Air Readings', 'Buildings', 'Tickets', 'Vehicles', 'Tram Lines', 'Bus Lines', 'Stops'];
     const [selectedIndex, setSelectedIndex] = useState<number>();
     const color = '#0c2d64';
 
@@ -19,7 +29,7 @@ const LeftPanel = () => {
                 <Box sx={{ width: 200, height: '100vh', display: 'flex', flexDirection: 'column', position: 'fixed'}}>
                     <List
                         sx={{backgroundColor: color}}>
-                        {items.map((item, index) => 
+                        {Object.values(CategoryEnum).map((item, index) =>
                             <LeftPanelListItem
                                 key={item}
                                 text={item}

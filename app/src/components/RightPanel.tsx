@@ -1,9 +1,18 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { AgGridReact } from 'ag-grid-react';
+import React, {useEffect, useRef, useState} from 'react';
+import {AgGridReact} from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-material.css';
 import ItemInfo from './ItemInfo';
-import { Alert, Snackbar, Select, MenuItem } from '@mui/material';
+import {Alert, Snackbar} from '@mui/material';
+import {fetchEmployees} from "../clients/EmployeesClient";
+import {fetchAirReadings} from "../clients/AirReadingsClient";
+import {fetchBuildings} from "../clients/BuildingsClient";
+import {fetchStops} from "../clients/StopsClient";
+import {fetchTickets} from "../clients/TicketsClient";
+import {fetchBusLines} from "../clients/BusLinesClient";
+import {fetchTramLines} from "../clients/TramLinesClient";
+import {fetchVehicles} from "../clients/VehiclesClient";
+import { CategoryEnum } from './LeftPanel';
 
 const RightPanel = (props) => {
   const [data, setData] = useState<any>();
@@ -27,20 +36,33 @@ const RightPanel = (props) => {
   };
 
   useEffect(() => {
-    var url;
-    if (props.query !== 'tickets') {
-      url = `${process.env.REACT_APP_URL}/${props.query}?limit=1000000&beforeId=0`
-    } else {
-      url = `${process.env.REACT_APP_URL}/${props.query}`;
-    }
-      fetch(url)
-      .then(result => result.json())
-      .then(data => {
-        setData(data);
-        setColumnDefs(props.columnDefs);
-        setIsShown(false);
-      })
+    fetchData().then(data => {
+      setData(data)
+      setColumnDefs(props.columnDefs)
+      setIsShown(false);
+    })
   }, [props.query, props.value]);
+
+  const fetchData = async () => {
+    switch (props.query as CategoryEnum) {
+      case CategoryEnum.AirReadings:
+        return await fetchAirReadings()
+      case CategoryEnum.Buildings:
+        return await fetchBuildings()
+      case CategoryEnum.BusLines:
+        return await fetchBusLines()
+      case CategoryEnum.Employees:
+        return await fetchEmployees()
+      case CategoryEnum.Stops:
+        return await fetchStops()
+      case CategoryEnum.Tickets:
+        return await fetchTickets()
+      case CategoryEnum.TramLines:
+        return await fetchTramLines()
+      case CategoryEnum.Vehicles:
+        return await fetchVehicles()
+    }
+  }
 
   const onRowSelected = () => {
     var selectedRows = gridRef.current.api.getSelectedRows();

@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState} from 'react';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import AddIcon from '@mui/icons-material/Add';
-import { IconButton, Tooltip, Dialog, DialogTitle, Snackbar, Alert, Avatar, ListItemIcon } from '@mui/material';
+import {Alert, Dialog, DialogTitle, IconButton, ListItemIcon, Snackbar, Tooltip} from '@mui/material';
 import BadgeIcon from '@mui/icons-material/Badge';
 import AirIcon from '@mui/icons-material/Air';
 import ApartmentIcon from '@mui/icons-material/Apartment';
@@ -14,6 +14,7 @@ import DirectionsBusIcon from '@mui/icons-material/DirectionsBus';
 import AirlineStopsIcon from '@mui/icons-material/AirlineStops';
 import Form from './Form';
 import Logger from '../logger/Logger';
+import {CategoryEnum} from "./LeftPanel";
 
 const LeftPanelListItem = (props) => {
     const logger = Logger.getInstance();
@@ -22,7 +23,7 @@ const LeftPanelListItem = (props) => {
     const [openAddSnackbar, setOpenAddSnackbar] = useState(false);
     const [snackbarAddMessage, setSnackbarAddMessage] = useState();
     const leftPanelColor = '#0e3678';
-    const text = props.text.toLowerCase();
+    const text = props.text as CategoryEnum
 
     const handleClickOpen = () => {
         props.setSelectedIndex(props.index);
@@ -30,97 +31,104 @@ const LeftPanelListItem = (props) => {
         props.query.current = text;
         logger.log(`Getting ${text} from database`);
 
-        if (props.query.current === 'air readings') {
-            props.query.current = 'airReadings';
-            props.setColumnDefs([
-                {field: 'airReadingDate'},
-            ])
-        } else if (props.query.current === 'employees') {
-            props.setColumnDefs([
-                {field: 'firstName'},
-                {field: 'lastName'},
-                {field: 'departmentName'}
-            ])
-        } else if (props.query.current === 'buildings') {
-            props.setColumnDefs([
-                {field: 'buildingName'},
-                {field: 'address'}
-            ])
-        } else if (props.query.current === 'tickets') {
-            props.setColumnDefs([
-                {field: 'name'}
-            ])
-        } else if (props.query.current === 'stops') {
-            props.setColumnDefs([
-                {field: 'stopName'}
-            ])
-        } else if (props.query.current === 'bus lines') {
-            props.query.current = 'busLines';
-            props.setColumnDefs([
-                {field: 'lineId', headerName: 'Line Number'}
-            ])
-        } else if (props.query.current === 'tram lines') {
-            props.query.current = 'tramLines';
-            props.setColumnDefs([
-                {field: 'lineId', headerName: 'Line Number'}
-            ])
-        } else if (props.query.current === 'vehicles') {
-            props.setColumnDefs([
-                {field: 'vehicleId'},
-                {field: 'modelName'},
-            ])
+        switch (props.query.current) {
+            case CategoryEnum.AirReadings:
+                props.setColumnDefs([
+                    {field: 'airReadingDate'},
+                ])
+                break;
+            case CategoryEnum.Buildings:
+                props.setColumnDefs([
+                    {field: 'buildingName'},
+                    {field: 'address'}
+                ])
+                break;
+            case CategoryEnum.BusLines:
+                props.setColumnDefs([
+                    {field: 'lineId', headerName: 'Line Number'}
+                ])
+                break;
+            case CategoryEnum.Employees:
+                props.setColumnDefs([
+                    {field: 'firstName'},
+                    {field: 'lastName'},
+                    {field: 'departmentName'}
+                ])
+                break;
+            case CategoryEnum.Stops:
+                props.setColumnDefs([
+                    {field: 'stopName'}
+                ])
+                break;
+            case CategoryEnum.TramLines:
+                props.setColumnDefs([
+                    {field: 'lineId', headerName: 'Line Number'}
+                ])
+                break;
+            case CategoryEnum.Tickets:
+                props.setColumnDefs([
+                    {field: 'name'}
+                ])
+                break;
+            case CategoryEnum.Vehicles:
+                props.setColumnDefs([
+                    {field: 'vehicleId'},
+                    {field: 'modelName'},
+                ])
+                break;
         }
     };
 
     const renderIcons = () => {
-        if (text === 'employees') {
-            return (
-                <ListItemIcon>
-                    <BadgeIcon sx={{color: 'white'}}/>
-                </ListItemIcon>
-            );
-        } else if (text === 'air readings') {
-            return (
-                <ListItemIcon>
-                    <AirIcon sx={{color: 'white'}}/>
-                </ListItemIcon>
-            );
-        } else if (text === 'buildings') {
-            return (
-                <ListItemIcon>
-                    <ApartmentIcon sx={{color: 'white'}}/>
-                </ListItemIcon>
-            );
-        } else if (text === 'tickets') {
-            return (
-                <ListItemIcon>
-                    <BookOnlineIcon sx={{color: 'white'}}/>
-                </ListItemIcon>
-            );
-        } else if (text === 'vehicles') {
-            return (
-                <ListItemIcon>
-                    <CommuteIcon sx={{color: 'white'}}/>
-                </ListItemIcon>
-            );
-        } else if (text === 'tram lines') {
-            return (
-                <ListItemIcon>
-                    <TramIcon sx={{color: 'white'}}/>
-                </ListItemIcon>
-            );
-        } else if (text === 'bus lines') {
-            return (
-                <ListItemIcon>
-                    <DirectionsBusIcon sx={{color: 'white'}}/>
-                </ListItemIcon>
-            ); 
-        } else if (text === 'stops') {
-            return (
-                <ListItemIcon>
-                    <AirlineStopsIcon sx={{color: 'white'}}/>
-                </ListItemIcon>
-            );
+        switch (text) {
+            case CategoryEnum.AirReadings:
+                return (
+                    <ListItemIcon>
+                        <AirIcon sx={{color: 'white'}}/>
+                    </ListItemIcon>
+                );
+            case CategoryEnum.Buildings:
+                return (
+                    <ListItemIcon>
+                        <ApartmentIcon sx={{color: 'white'}}/>
+                    </ListItemIcon>
+                );
+            case CategoryEnum.BusLines:
+                return (
+                    <ListItemIcon>
+                        <DirectionsBusIcon sx={{color: 'white'}}/>
+                    </ListItemIcon>
+                );
+            case CategoryEnum.Employees:
+                return (
+                    <ListItemIcon>
+                        <BadgeIcon sx={{color: 'white'}}/>
+                    </ListItemIcon>
+                );
+            case CategoryEnum.Stops:
+                return (
+                    <ListItemIcon>
+                        <AirlineStopsIcon sx={{color: 'white'}}/>
+                    </ListItemIcon>
+                );
+            case CategoryEnum.TramLines:
+                return (
+                    <ListItemIcon>
+                        <TramIcon sx={{color: 'white'}}/>
+                    </ListItemIcon>
+                );
+            case CategoryEnum.Tickets:
+                return (
+                    <ListItemIcon>
+                        <BookOnlineIcon sx={{color: 'white'}}/>
+                    </ListItemIcon>
+                );
+            case CategoryEnum.Vehicles:
+                return (
+                    <ListItemIcon>
+                        <CommuteIcon sx={{color: 'white'}}/>
+                    </ListItemIcon>
+                );
         }
     };
 
