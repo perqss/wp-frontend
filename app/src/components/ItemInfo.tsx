@@ -1,12 +1,13 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
-import { AgGridReact } from 'ag-grid-react';
+import {AgGridReact} from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-material.css';
 import Form from './Form';
-import { Button, Dialog, IconButton, Typography, Tooltip, Box, Paper, Grid, DialogTitle, Snackbar, Alert } from '@mui/material';
+import {Box, Button, Dialog, DialogTitle, Grid, IconButton, Paper, Tooltip, Typography} from '@mui/material';
 import Logger from '../logger/Logger';
-import { ItemInfoButton } from './MaterialComponentsCss';
+import {ItemInfoButton} from './MaterialComponentsCss';
+import {CategoryEnum} from "./LeftPanel";
 
 const ItemInfo = (props) => {
     const logger = Logger.getInstance();
@@ -68,13 +69,13 @@ const ItemInfo = (props) => {
     };
 
     const handleDelete = () => {
-        if (props.query === 'employees') {
+        if (props.query === CategoryEnum.Employees) {
             fetch(`${process.env.REACT_APP_URL}/employees/${props.details.employeeID}`, {method: 'DELETE'})
             .then(() => {
                 props.setOpenDeleteSnackbar(true);
                 props.setSnackbarDeleteMessage('Successfully deleted employee');
             })
-        } else if (props.query === 'tickets') {
+        } else if (props.query === CategoryEnum.Tickets) {
             fetch(`${process.env.REACT_APP_URL}/tickets/${props.details.ticketId}`, {method: 'DELETE'})
             .then(() => {
                 props.setOpenDeleteSnackbar(true);
@@ -85,21 +86,30 @@ const ItemInfo = (props) => {
     };
 
     const renderUpdateButtons = () => {
-        if (props.query === 'employees') {
+        if (props.query === CategoryEnum.Employees) {
             return (
-                <ItemInfoButton variant='contained' onClick={handleUpdate}>
+                <ItemInfoButton
+                    variant='contained'
+                    onClick={handleUpdate}
+                >
                     Update Employee
                 </ItemInfoButton>
             );
-        } else if (props.query === 'buildings') {
+        } else if (props.query === CategoryEnum.Buildings) {
             return (
-                <ItemInfoButton variant='contained' onClick={handleUpdate}>
+                <ItemInfoButton
+                    variant='contained'
+                    onClick={handleUpdate}
+                >
                     Update Building
                 </ItemInfoButton>
             );
-        } else if (props.query === 'tickets') {
+        } else if (props.query === CategoryEnum.Tickets) {
             return (
-                <ItemInfoButton variant='contained' onClick={handleUpdate}>
+                <ItemInfoButton
+                    variant='contained'
+                    onClick={handleUpdate}
+                >
                     Update Ticket
                 </ItemInfoButton>
             ); 
@@ -107,7 +117,7 @@ const ItemInfo = (props) => {
     };
 
     useEffect(() => {
-        if (props.query === 'employees') {
+        if (props.query === CategoryEnum.Employees) {
             fetch(`${process.env.REACT_APP_URL}/employees/${props.details.employeeID}/holidays`)
             .then(result => result.json())
             .then(data => {
@@ -118,12 +128,12 @@ const ItemInfo = (props) => {
                     {field: 'dateTo'},
                 ]);
             })
-        } else if (props.query === 'busLines' || props.query === 'tramLines') {
+        } else if (props.query === CategoryEnum.BusLines || props.query === CategoryEnum.TramLines) {
             setStopsData(parseStops(props.details.stops));
             setStopsColumnDefs([
                 {field: 'stopName'},
             ])
-        } else if (props.query === 'vehicles') {
+        } else if (props.query === CategoryEnum.Vehicles) {
             setRepairsData(props.details.repairHistory);
             setRepairsColumnDefs([
                 {field: 'dateFrom'},

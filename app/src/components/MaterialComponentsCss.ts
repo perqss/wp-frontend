@@ -33,7 +33,7 @@ const ItemInfoButton = styled(Button)<ButtonProps>(({ theme }) => ({
 }))
 
 const StyledAlert = styled(Alert)<AlertProps>(({ theme }) => ({
-    width: 142, 
+    width: 250,
     marginTop: 1,
 }));
 

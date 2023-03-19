@@ -6,6 +6,9 @@ import {FormBox, FormButton, FormTextField, StyledAlert} from './MaterialCompone
 import {CategoryEnum} from "./LeftPanel";
 import AirReading from "../models/AirReading";
 import {addAirReading} from "../clients/AirReadingsClient";
+import {addBuilding, updateBuilding} from "../clients/BuildingsClient";
+import {addEmployee, updateEmployee} from "../clients/EmployeesClient";
+import {addTicket, updateTicket} from "../clients/TicketsClient";
 
 const Form = (props) => {
   const [values, setValues] = useState<any>();
@@ -37,80 +40,58 @@ const Form = (props) => {
   }, [props.query]);
 
   const handleUpdate = async () => {
-     var url = `${process.env.REACT_APP_URL}/`;
-    // props.query === 'air readings' ? url += 'airReadings' : url += `${props.query}`;
-      console.log(props.add)
     if (!props.add) {
-      if (props.query === 'employees') {
-        url += `/${props.objectToUpdate.employeeID}`;
-      } else if (props.query === 'buildings') {
-        url += `/${props.objectToUpdate.buildingId}`;
-      } else if (props.query === 'tickets') {
-        url += `/${props.objectToUpdate.ticketId}`;
-      }
-
-      await fetch(url, {
-        method: 'PUT',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(values),
-      })
-      .then(response => {
-        if (response.status < 200 || response.status > 299) {
-          return response.json();
-        } else {
-          props.setOpenUpdateSnackbar(true);
-          props.setSnackbarUpdateMessage(`Successfully updated ${props.query.substr(0, props.query.length - 1)}`);
-          props.setUpdateFormOpen(false);
-          return null;
-        }
-      })
-      .then(responseErrors => {
-        if (responseErrors) {
-          setErrors(new Set(responseErrors))
-        } else {
-          props.setValue(props.value + 1);
-        }
-      });
+        updateData()
+            .then(responseErrors => {
+                if (responseErrors) {
+                    setErrors(responseErrors)
+                } else {
+                    props.setOpenUpdateSnackbar(true);
+                    props.setSnackbarUpdateMessage(`Successfully updated ${props.query.substr(0, props.query.length - 1)}`);
+                    props.setUpdateFormOpen(false);
+                    props.setValue(props.value + 1);
+                }
+            })
     }
 
     else {
-        addAirReading(values).then(response => {
-                props.setOpenAddSnackbar(true);
-                props.setSnackbarAddMessage(`Successfully added ${props.query.substr(0, props.query.length - 1)}`);
-                props.setAddFormOpen(false);
-                return null;
-              })
-
-      // await fetch(url, {
-      //   method: 'POST',
-      //   headers: {
-      //     'Accept': 'application/json',
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify(values),
-      // })
-      // .then(response => {
-      //   if (response.status < 200 || response.status > 299) {
-      //     return response.json();
-      //   } else {
-      //     props.setOpenAddSnackbar(true);
-      //     props.setSnackbarAddMessage(`Successfully added ${props.query.substr(0, props.query.length - 1)}`);
-      //     props.setAddFormOpen(false);
-      //     return null;
-      //   }
-      // })
-      // .then(responseErrors => {
-      //   if (responseErrors) {
-      //     setErrors(new Set(responseErrors))
-      //   } else {
-      //     props.setValue(props.value + 1);
-      //   }
-      // })
+        addData()
+            .then(responseErrors => {
+                if (responseErrors) {
+                    setErrors(responseErrors)
+                } else {
+                    props.setOpenAddSnackbar(true);
+                    props.setSnackbarAddMessage(`Successfully added ${props.query.substr(0, props.query.length - 1)}`);
+                    props.setAddFormOpen(false);
+                    props.setValue(props.value + 1);
+                }
+            })
     }
   };
+
+  const updateData = async () => {
+      switch (props.query) {
+          case CategoryEnum.Buildings:
+              return await updateBuilding(values, props.objectToUpdate.buildingId);
+          case CategoryEnum.Employees:
+              return await updateEmployee(values, props.objectToUpdate.employeeID);
+          case CategoryEnum.Tickets:
+              return await updateTicket(values, props.objectToUpdate.ticketId);
+      }
+  }
+
+  const addData = async () => {
+      switch (props.query) {
+          case CategoryEnum.AirReadings:
+              return await addAirReading(values);
+          case CategoryEnum.Buildings:
+              return await addBuilding(values);
+          case CategoryEnum.Employees:
+              return await addEmployee(values);
+          case CategoryEnum.Tickets:
+              return await addTicket(values);
+        }
+    }
 
   const handleInputChange = (e) => {
     let {name, value, checked, type} = e.target;
@@ -128,7 +109,7 @@ const Form = (props) => {
   };
 
   const generateErrorMessages = () => {
-      [...errors].map((error, id) =>
+      return [...errors].map((error, id) =>
           <StyledAlert
               variant='filled'
               severity='error'
@@ -140,7 +121,6 @@ const Form = (props) => {
   }
 
   const renderFields = () => {
-      console.log(props.query)
       switch (props.query) {
           case CategoryEnum.AirReadings:
               return (

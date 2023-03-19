@@ -1,18 +1,6 @@
 import {initPost, initPut} from "./ClientUtils";
 
-export class FetchError extends Error {
-    public readonly status: number;
-    constructor(status: number, message?: string) {
-        super(message);
-        this.status = status;
-    }
-}
-
 const getResponseBody = async (fetchResponse: Response) => {
-    if (!fetchResponse.ok) {
-        throw new FetchError(fetchResponse.status, fetchResponse.statusText)
-    }
-
     let data: unknown;
     try {
         data = await fetchResponse.json();
