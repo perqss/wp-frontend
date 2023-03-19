@@ -65,7 +65,7 @@ const RightPanel = (props) => {
   }
 
   const onRowSelected = () => {
-    var selectedRows = gridRef.current.api.getSelectedRows();
+    const selectedRows = gridRef.current.api.getSelectedRows();
     setDetails(selectedRows[0]);
     setIsShown(true);
   };
@@ -88,18 +88,19 @@ const RightPanel = (props) => {
         />
       </div>  
       }
-      {isShown && <ItemInfo
-          details={details}
-          setDetails={setDetails}
-          query={props.query}
-          setIsShown={setIsShown}
-          value={props.value}
-          setValue={props.setValue}
-          setOpenUpdateSnackbar={setOpenUpdateSnackbar}
-          setSnackbarUpdateMessage={setSnackbarUpdateMessage}
-          setOpenDeleteSnackbar={setOpenDeleteSnackbar}
-          setSnackbarDeleteMessage={setSnackbarDeleteMessage}
-      />
+      {isShown &&
+          <ItemInfo
+            details={details}
+            setDetails={setDetails}
+            query={props.query}
+            setIsShown={setIsShown}
+            value={props.value}
+            setValue={props.setValue}
+            setOpenUpdateSnackbar={setOpenUpdateSnackbar}
+            setSnackbarUpdateMessage={setSnackbarUpdateMessage}
+            setOpenDeleteSnackbar={setOpenDeleteSnackbar}
+            setSnackbarDeleteMessage={setSnackbarDeleteMessage}
+          />
       }
       <Snackbar
           open={openUpdateSnackbar}
