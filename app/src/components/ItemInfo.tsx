@@ -102,14 +102,16 @@ const ItemInfo = (props) => {
                 break;
         }
 
-        return (
-            <ItemInfoButton
-                variant='contained'
-                onClick={handleUpdate}
-            >
-                {text}
-            </ItemInfoButton>
-        )
+        if (text !== '') {
+            return (
+                <ItemInfoButton
+                    variant='contained'
+                    onClick={handleUpdate}
+                >
+                    {text}
+                </ItemInfoButton>
+            )
+        }
     };
 
     useEffect(() => {
@@ -267,7 +269,7 @@ const ItemInfo = (props) => {
                     </div>
                 </div>
             }
-            {props.query === 'vehicles' ?
+            {props.query === CategoryEnum.Vehicles ?
                 <Typography
                     variant='h6'
                     gutterBottom
