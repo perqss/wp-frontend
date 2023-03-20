@@ -1,7 +1,7 @@
-import {doGet, doPost, doPut} from "./common";
+import {doDelete, doGet, doPost, doPut} from "./common";
 
 export const fetchTickets = async (limit: number = 10000, beforeId: number = 0) => {
-    let url: string = `${process.env.REACT_APP_URL}/tickets?limit=${limit}&beforeId=${beforeId}`
+    let url: string = `${process.env.REACT_APP_URL}/tickets?limit=${limit}&beforeId=${beforeId}`;
     return await doGet(url);
 }
 
@@ -13,4 +13,9 @@ export const addTicket = async (values: any) => {
 export const updateTicket = async (values: any, id: number)  => {
     const url: string = `${process.env.REACT_APP_URL}/tickets/${id}`;
     return doPut(url, values);
+}
+
+export const deleteTicket = async (ticketId: number) => {
+    const url: string = `${process.env.REACT_APP_URL}/tickets/${ticketId}`;
+    return doDelete(url);
 }

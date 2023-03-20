@@ -78,7 +78,6 @@ const RightPanel = (props: {
 
   const onRowSelected = () => {
     const selectedRows = gridRef.current.api.getSelectedRows();
-    console.log(selectedRows[0])
     setDetails(selectedRows[0]);
     setIsShown(true);
   };
@@ -103,7 +102,8 @@ const RightPanel = (props: {
         />
       </div>  
       }
-      {isShown && <ItemInfo
+      {isShown && 
+      <ItemInfo
           details={details}
           setDetails={setDetails}
           query={props.query}

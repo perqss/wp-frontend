@@ -1,7 +1,7 @@
-import {doGet, doPost, doPut} from "./common";
+import {doDelete, doGet, doPost, doPut} from "./common";
 
 export const fetchEmployees = async (limit: number = 10000, beforeId: number = 0) => {
-    let url: string = `${process.env.REACT_APP_URL}/employees?limit=${limit}&beforeId=${beforeId}`
+    let url: string = `${process.env.REACT_APP_URL}/employees?limit=${limit}&beforeId=${beforeId}`;
     return await doGet(url);
 }
 
@@ -13,4 +13,9 @@ export const addEmployee = async (values: any) => {
 export const updateEmployee = async (values: any, id: number)  => {
     const url: string = `${process.env.REACT_APP_URL}/employees/${id}`;
     return doPut(url, values);
+}
+
+export const deleteEmployee = async (employeeId: number) => {
+    const url: string = `${process.env.REACT_APP_URL}/employees/${employeeId}`;
+    return doDelete(url);
 }

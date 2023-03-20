@@ -21,3 +21,7 @@ export const doPost = async (url: string, request: any) => {
 export const doPut = async (url: string, request: any) => {
     return getResponseBody(await fetch(url, initPut(JSON.stringify(request))))
 }
+
+export const doDelete = async (url: string) => {
+    return getResponseBody(await fetch(url));
+}

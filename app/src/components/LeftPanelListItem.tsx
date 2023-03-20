@@ -179,19 +179,23 @@ const LeftPanelListItem = (props: {
                         ':hover': {
                             backgroundColor: leftPanelColor,
                         }
-                    }}>
+                    }}
+                >
                     {renderIcons()}
                     <ListItemText
                         primary={props.text}
-                        primaryTypographyProps={{fontSize: 'large', color: 'white'}}/>
+                        primaryTypographyProps={{fontSize: 'large', color: 'white'}}
+                    />
                 </ListItemButton>
                 {addableFields.includes(props.text) &&
                     <Tooltip
                         title={`Add new ${props.text.toLowerCase().substr(0, props.text.length - 1)} to database`}
                         placement='right'
                     >
-                        <IconButton onClick={handleClickAdd}>
-                            <AddIcon sx={{color: 'white'}}/>
+                        <IconButton
+                            onClick={handleClickAdd}
+                        >
+                                <AddIcon sx={{color: 'white'}}/>
                         </IconButton>
                     </Tooltip>
                 }  
