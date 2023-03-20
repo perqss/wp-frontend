@@ -15,15 +15,30 @@ import AirlineStopsIcon from '@mui/icons-material/AirlineStops';
 import Form from './Form';
 import Logger from '../logger/Logger';
 import {CategoryEnum} from "./LeftPanel";
+import {Table} from './LeftPanel';
 
-const LeftPanelListItem = (props) => {
-    const logger = Logger.getInstance();
-    const addableFields = ['Employees', 'Buildings', 'Air Readings', 'Tickets'];
-    const [addFormOpen, setAddFormOpen] = useState(false);
-    const [openAddSnackbar, setOpenAddSnackbar] = useState(false);
-    const [snackbarAddMessage, setSnackbarAddMessage] = useState();
-    const leftPanelColor = '#0e3678';
-    const text = props.text as CategoryEnum
+const LeftPanelListItem = (props: {
+        key: string, 
+        text: string, 
+        index: number, 
+        open: boolean, 
+        setOpen: React.Dispatch<React.SetStateAction<boolean>>, 
+        query: React.MutableRefObject<string>, 
+        columnDefs: Table[], setColumnDefs: React.Dispatch<React.SetStateAction<Table[]>>,
+        selectedIndex: number | undefined, 
+        setSelectedIndex: React.Dispatch<React.SetStateAction<number | undefined>>, 
+        value: number,
+        setValue: React.Dispatch<React.SetStateAction<number>>,
+        openAddSnackbar: boolean,
+        setOpenAddSnackbar: React.Dispatch<React.SetStateAction<boolean>>,
+        snackbarAddMessage: string,
+        setSnackbarAddMessage: React.Dispatch<React.SetStateAction<string>>,
+    }) => {
+    const logger: Logger = Logger.getInstance();
+    const addableFields: string[] = ['Employees', 'Buildings', 'Air Readings', 'Tickets'];
+    const [addFormOpen, setAddFormOpen] = useState<boolean>(false);
+    const leftPanelColor: string = '#0e3678';
+    const text = props.text as CategoryEnum;
 
     const handleClickOpen = () => {
         props.setSelectedIndex(props.index);
@@ -135,7 +150,7 @@ const LeftPanelListItem = (props) => {
     const handleClickAdd = () => {
         setAddFormOpen(true);
     };
-
+    console.log(props.value)
     return (
         <div>
             <Dialog open={addFormOpen} onClose={() => setAddFormOpen(false)}>
@@ -145,8 +160,8 @@ const LeftPanelListItem = (props) => {
                     setAddFormOpen={setAddFormOpen}
                     value={props.value}
                     setValue={props.setValue}
-                    setOpenAddSnackbar={setOpenAddSnackbar}
-                    setSnackbarAddMessage={setSnackbarAddMessage}
+                    setOpenAddSnackbar={props.setOpenAddSnackbar}
+                    setSnackbarAddMessage={props.setSnackbarAddMessage}
                     add
                 />
             </Dialog>
@@ -181,19 +196,19 @@ const LeftPanelListItem = (props) => {
                     </Tooltip>
                 }  
             </ListItem>
-            <Snackbar
-                open={openAddSnackbar}
+            {/* <Snackbar
+                open={props.openAddSnackbar}
                 autoHideDuration={2000}
-                onClose={() => setOpenAddSnackbar(false)}
+                onClose={() => props.setOpenAddSnackbar(false)}
             >
                 <Alert
-                    onClose={() => setOpenAddSnackbar(false)}
+                    onClose={() => props.setOpenAddSnackbar(false)}
                     severity='success'
                     variant='filled'
                 >
-                    {snackbarAddMessage}
+                    {props.snackbarAddMessage}
                 </Alert>
-            </Snackbar>
+            </Snackbar> */}
         </div>
     );
 }

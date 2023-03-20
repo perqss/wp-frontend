@@ -10,12 +10,24 @@ import {addBuilding, updateBuilding} from "../clients/BuildingsClient";
 import {addEmployee, updateEmployee} from "../clients/EmployeesClient";
 import {addTicket, updateTicket} from "../clients/TicketsClient";
 
-const Form = (props) => {
+const Form = (props: {
+        query: string;
+        setUpdateFormOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+        objectToUpdate?: any;
+        value: number;
+        setValue: React.Dispatch<React.SetStateAction<number>>;
+        setOpenUpdateSnackbar?: React.Dispatch<React.SetStateAction<boolean>>;
+        setSnackbarUpdateMessage?: React.Dispatch<React.SetStateAction<string>>;
+        setAddFormOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+        setOpenAddSnackbar?: React.Dispatch<React.SetStateAction<boolean>>;
+        setSnackbarAddMessage?: React.Dispatch<React.SetStateAction<string>>;
+        add?: boolean;
+    }) => {
   const [values, setValues] = useState<any>();
   const [errors, setErrors] = useState<any>();
 
   useEffect(() => {
-      let it;
+      let it: any;
       const object = props.objectToUpdate;
       switch (props.query as CategoryEnum) {
         case CategoryEnum.Employees:
@@ -31,10 +43,10 @@ const Form = (props) => {
           it = props.add ? new Ticket() :
               new Ticket(object.ticketId, object.name, object.price, object.periodic);
           break;
-          case CategoryEnum.AirReadings:
-              it = props.add ? new AirReading() :
-                  new AirReading(object.airReadingDate, object.PM10, object.SO2, object.PM25, object.NO2, object.O3);
-              break;
+        case CategoryEnum.AirReadings:
+          it = props.add ? new AirReading() :
+              new AirReading(object.airReadingDate, object.PM10, object.SO2, object.PM25, object.NO2, object.O3);
+          break;
       }
     setValues(it);
   }, [props.query]);
@@ -46,9 +58,9 @@ const Form = (props) => {
                 if (responseErrors) {
                     setErrors(responseErrors)
                 } else {
-                    props.setOpenUpdateSnackbar(true);
-                    props.setSnackbarUpdateMessage(`Successfully updated ${props.query.substr(0, props.query.length - 1)}`);
-                    props.setUpdateFormOpen(false);
+                    props.setOpenUpdateSnackbar?.(true);
+                    props.setSnackbarUpdateMessage?.(`Successfully updated ${props.query.substr(0, props.query.length - 1)}`);
+                    props.setUpdateFormOpen?.(false);
                     props.setValue(props.value + 1);
                 }
             })
@@ -60,9 +72,9 @@ const Form = (props) => {
                 if (responseErrors) {
                     setErrors(responseErrors)
                 } else {
-                    props.setOpenAddSnackbar(true);
-                    props.setSnackbarAddMessage(`Successfully added ${props.query.substr(0, props.query.length - 1)}`);
-                    props.setAddFormOpen(false);
+                    props.setOpenAddSnackbar?.(true);
+                    props.setSnackbarAddMessage?.(`Successfully added ${props.query.substr(0, props.query.length - 1)}`);
+                    props.setAddFormOpen?.(false);
                     props.setValue(props.value + 1);
                 }
             })
@@ -95,6 +107,7 @@ const Form = (props) => {
 
   const handleInputChange = (e) => {
     let {name, value, checked, type} = e.target;
+    console.log(values)
 
     if (name === 'periodic') {
       value = checked;
@@ -109,6 +122,7 @@ const Form = (props) => {
   };
 
   const generateErrorMessages = () => {
+    console.log(errors)
       return [...errors].map((error, id) =>
           <StyledAlert
               variant='filled'

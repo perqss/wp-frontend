@@ -7,15 +7,36 @@ import Form from './Form';
 import {Box, Button, Dialog, DialogTitle, Grid, IconButton, Paper, Tooltip, Typography} from '@mui/material';
 import Logger from '../logger/Logger';
 import {ItemInfoButton} from './MaterialComponentsCss';
-import {CategoryEnum} from "./LeftPanel";
+import {CategoryEnum} from './LeftPanel';
+import {Table} from './LeftPanel';
 
-const ItemInfo = (props) => {
-    const logger = Logger.getInstance();
+interface Holiday {
+    employeeId: number;
+    dateFrom: any;
+    dateTo: any;
+}
+
+interface Stop {
+    stopName: string;
+}
+
+const ItemInfo = (props: {
+        details: any;
+        setDetails: React.Dispatch<React.SetStateAction<any>>;
+        query: string;
+        value: number;
+        setValue: React.Dispatch<React.SetStateAction<number>>;
+        setOpenUpdateSnackbar: React.Dispatch<React.SetStateAction<boolean>>;
+        setSnackbarUpdateMessage: React.Dispatch<React.SetStateAction<string>>;
+        setOpenDeleteSnackbar: React.Dispatch<React.SetStateAction<boolean>>;
+        setSnackbarDeleteMessage: React.Dispatch<React.SetStateAction<string>>;
+    }) => {
+    const logger: Logger = Logger.getInstance();
     logger.log(`Object sent to ItemInfo: ${JSON.stringify(props.details)}`);
 
-    const [holidayData, setHolidayData] = useState();
-    const [holidayColumnDefs, setHolidayColumnDefs] = useState<any>();
-    const [updateFormOpen, setUpdateFormOpen] = useState(false);
+    const [holidayData, setHolidayData] = useState<Holiday[]>();
+    const [holidayColumnDefs, setHolidayColumnDefs] = useState<Table[]>([]);
+    const [updateFormOpen, setUpdateFormOpen] = useState<boolean>(false);
     const defaultColDef = {
         flex: 1,
         resizable: true,
@@ -27,20 +48,20 @@ const ItemInfo = (props) => {
         autoHeaderHeight: true,
     };
     const defaultHolidayColDef = defaultColDef;
-    const [stopsData, setStopsData] = useState<any>();
-    const [stopsColumnDefs, setStopsColumnDefs] = useState<any>();
+    const [stopsData, setStopsData] = useState<Stop[]>();
+    const [stopsColumnDefs, setStopsColumnDefs] = useState<Table[]>();
     const defaultStopsColDef = defaultColDef;
     const [repairsData, setRepairsData] = useState<any>();
-    const [repairsColumnDefs, setRepairsColumnDefs] = useState<any>();
+    const [repairsColumnDefs, setRepairsColumnDefs] = useState<Table[]>();
     const defaultRepairsColDef = defaultColDef;
-    var stopsReversed = useRef(false);
+    var stopsReversed = useRef<boolean>(false);
     
-    const parseStops = (stops) => {
+    const parseStops = (stops: string[]) => {
         let data = stops.map(stopName => {return {stopName}});
         return data;
     };
 
-    const parseHolidays = (holidays) => {
+    const parseHolidays = (holidays: Holiday[]) => {
         for (let i = 0; i < holidays.length; i++) {
             holidays[i].dateFrom = holidays[i].dateFrom.join('-');
             holidays[i].dateTo = holidays[i].dateTo.join('-');
@@ -74,19 +95,21 @@ const ItemInfo = (props) => {
             .then(() => {
                 props.setOpenDeleteSnackbar(true);
                 props.setSnackbarDeleteMessage('Successfully deleted employee');
+                props.setValue(props.value + 1);
             })
         } else if (props.query === CategoryEnum.Tickets) {
             fetch(`${process.env.REACT_APP_URL}/tickets/${props.details.ticketId}`, {method: 'DELETE'})
             .then(() => {
                 props.setOpenDeleteSnackbar(true);
                 props.setSnackbarDeleteMessage('Successfully deleted ticket');
+                props.setValue(props.value + 1);
             })
         }
-        props.setValue(props.value + 1);
     };
 
     const renderUpdateButtons = () => {
-        if (props.query === CategoryEnum.Employees) {
+        if (props.query === CategoryEnum.Employees && 'employeeID' in props.details) {
+            console.log(props.details)
             return (
                 <ItemInfoButton
                     variant='contained'
@@ -95,7 +118,7 @@ const ItemInfo = (props) => {
                     Update Employee
                 </ItemInfoButton>
             );
-        } else if (props.query === CategoryEnum.Buildings) {
+        } else if (props.query === CategoryEnum.Buildings && 'buildingId' in props.details) {
             return (
                 <ItemInfoButton
                     variant='contained'
@@ -104,7 +127,7 @@ const ItemInfo = (props) => {
                     Update Building
                 </ItemInfoButton>
             );
-        } else if (props.query === CategoryEnum.Tickets) {
+        } else if (props.query === CategoryEnum.Tickets && 'ticketId' in props.details) {
             return (
                 <ItemInfoButton
                     variant='contained'
@@ -159,7 +182,7 @@ const ItemInfo = (props) => {
         }
       };
 
-      const parseObjectValue = (value) => {
+      const parseObjectValue = (value: string) => {
         if (value === 'false') {
             return 'No';
         } else if (value === 'true') {
@@ -201,14 +224,14 @@ const ItemInfo = (props) => {
             )}
         </Grid>
         {renderUpdateButtons()}
-        {props.query === 'employees' || props.query === 'tickets' ? 
+        {props.query === CategoryEnum.Employees || props.query === CategoryEnum.Tickets ? 
             <Tooltip title='Delete item from database'>
                 <IconButton sx={{marginTop: 5}} onClick={handleDelete}>
                     <DeleteOutlinedIcon sx={{color: 'red', fontSize: 40}}/>
                 </IconButton>
             </Tooltip> : ''
         }
-        {props.query === 'employees' ? 
+        {props.query === CategoryEnum.Employees ? 
             <Typography variant='h6' gutterBottom sx={{marginTop: 5, color: '#0c2d64'}}>
                 Holidays
             </Typography> : ''
@@ -241,7 +264,7 @@ const ItemInfo = (props) => {
                 </div>
             </div>
         }
-        {props.query === 'vehicles' ? 
+        {props.query === CategoryEnum.Vehicles ? 
             <Typography variant='h6' gutterBottom sx={{marginTop: 5, color: '#0c2d64'}}>
                 Repair History
             </Typography> : ''

@@ -4,26 +4,37 @@ import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-material.css';
 import ItemInfo from './ItemInfo';
 import {Alert, Snackbar} from '@mui/material';
-import {fetchEmployees} from "../clients/EmployeesClient";
-import {fetchAirReadings} from "../clients/AirReadingsClient";
-import {fetchBuildings} from "../clients/BuildingsClient";
-import {fetchStops} from "../clients/StopsClient";
-import {fetchTickets} from "../clients/TicketsClient";
-import {fetchBusLines} from "../clients/BusLinesClient";
-import {fetchTramLines} from "../clients/TramLinesClient";
-import {fetchVehicles} from "../clients/VehiclesClient";
+import {fetchEmployees} from '../clients/EmployeesClient';
+import {fetchAirReadings} from '../clients/AirReadingsClient';
+import {fetchBuildings} from '../clients/BuildingsClient';
+import {fetchStops} from '../clients/StopsClient';
+import {fetchTickets} from '../clients/TicketsClient';
+import {fetchBusLines} from '../clients/BusLinesClient';
+import {fetchTramLines} from '../clients/TramLinesClient';
+import {fetchVehicles} from '../clients/VehiclesClient';
 import { CategoryEnum } from './LeftPanel';
-
-const RightPanel = (props) => {
+import { Table } from './LeftPanel';
+ 
+const RightPanel = (props: {
+    className: string;
+    query: string;
+    columnDefs: Table[];  
+    value: number;
+    setValue: React.Dispatch<React.SetStateAction<number>>;
+    openAddSnackbar: boolean,
+    setOpenAddSnackbar: React.Dispatch<React.SetStateAction<boolean>>,
+    snackbarAddMessage: string,
+    setSnackbarAddMessage: React.Dispatch<React.SetStateAction<string>>,
+  }) => {
   const [data, setData] = useState<any>();
-  const [isShown, setIsShown] = useState(false);
-  const [columnDefs, setColumnDefs] = useState();
-  const [openUpdateSnackbar, setOpenUpdateSnackbar] = useState(false);
-  const [snackbarUpdateMessage, setSnackbarUpdateMessage] = useState();
-  const [openDeleteSnackbar, setOpenDeleteSnackbar] = useState(false);
-  const [snackbarDeleteMessage, setSnackbarDeleteMessage] = useState('');
+  const [isShown, setIsShown] = useState<boolean>(false);
+  const [columnDefs, setColumnDefs] = useState<Table[]>([]);
+  const [openUpdateSnackbar, setOpenUpdateSnackbar] = useState<boolean>(false);
+  const [snackbarUpdateMessage, setSnackbarUpdateMessage] = useState<string>('');
+  const [openDeleteSnackbar, setOpenDeleteSnackbar] = useState<boolean>(false);
+  const [snackbarDeleteMessage, setSnackbarDeleteMessage] = useState<string>('');
   const gridRef = useRef<any>(null);
-  const [details, setDetails] = useState();
+  const [details, setDetails] = useState<any>();
   const defaultColDef = {
     flex: 1,
     resizable: true,
@@ -37,38 +48,42 @@ const RightPanel = (props) => {
 
   useEffect(() => {
     fetchData().then(data => {
-      setData(data)
-      setColumnDefs(props.columnDefs)
+      setData(data);
+      setColumnDefs(props.columnDefs);
       setIsShown(false);
+      console.log(props.value)
     })
   }, [props.query, props.value]);
 
   const fetchData = async () => {
     switch (props.query as CategoryEnum) {
       case CategoryEnum.AirReadings:
-        return await fetchAirReadings()
+        return await fetchAirReadings();
       case CategoryEnum.Buildings:
-        return await fetchBuildings()
+        return await fetchBuildings();
       case CategoryEnum.BusLines:
-        return await fetchBusLines()
+        return await fetchBusLines();
       case CategoryEnum.Employees:
-        return await fetchEmployees()
+        return await fetchEmployees();
       case CategoryEnum.Stops:
-        return await fetchStops()
+        return await fetchStops();
       case CategoryEnum.Tickets:
-        return await fetchTickets()
+        return await fetchTickets();
       case CategoryEnum.TramLines:
-        return await fetchTramLines()
+        return await fetchTramLines();
       case CategoryEnum.Vehicles:
-        return await fetchVehicles()
+        return await fetchVehicles();
     }
   }
 
   const onRowSelected = () => {
-    var selectedRows = gridRef.current.api.getSelectedRows();
+    const selectedRows = gridRef.current.api.getSelectedRows();
+    console.log(selectedRows[0])
     setDetails(selectedRows[0]);
     setIsShown(true);
   };
+
+  console.log(props.value)
 
   return (
     <div className='right-panel'>
@@ -92,7 +107,6 @@ const RightPanel = (props) => {
           details={details}
           setDetails={setDetails}
           query={props.query}
-          setIsShown={setIsShown}
           value={props.value}
           setValue={props.setValue}
           setOpenUpdateSnackbar={setOpenUpdateSnackbar}
@@ -123,6 +137,19 @@ const RightPanel = (props) => {
               severity='success'
               variant='filled'>
                 {snackbarDeleteMessage}
+          </Alert>
+      </Snackbar>
+      <Snackbar
+          open={props.openAddSnackbar}
+          autoHideDuration={2000}
+          onClose={() => props.setOpenAddSnackbar(false)}
+      >
+          <Alert
+              onClose={() => props.setOpenAddSnackbar(false)}
+              severity='success'
+              variant='filled'
+          >
+              {props.snackbarAddMessage}
           </Alert>
       </Snackbar>
     </div>

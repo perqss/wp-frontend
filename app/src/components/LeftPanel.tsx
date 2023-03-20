@@ -15,20 +15,26 @@ export enum CategoryEnum {
     Vehicles = 'Vehicles',
 }
 
+export interface Table {
+    field: string;
+    headerName?: string;
+}
+
 const LeftPanel = () => {
-    const [open, setOpen] = useState(false);
-    const [value, setValue] = useState(0);
-    const query = useRef();
-    const [columnDefs, setColumnDefs] = useState([]);
+    const [open, setOpen] = useState<boolean>(false);
+    const [value, setValue] = useState<number>(0);
+    const query = useRef<string>('');
+    const [columnDefs, setColumnDefs] = useState<Table[]>([]);
     const [selectedIndex, setSelectedIndex] = useState<number>();
-    const color = '#0c2d64';
+    const color: string = '#0c2d64';
+    const [openAddSnackbar, setOpenAddSnackbar] = useState<boolean>(false);
+    const [snackbarAddMessage, setSnackbarAddMessage] = useState<string>('');
 
     return (
         <div style={{width: '100vw', height: '100vh'}}>
             <Box sx={{display: 'flex', flexDirection: 'row'}}>
                 <Box sx={{ width: 200, height: '100vh', display: 'flex', flexDirection: 'column', position: 'fixed'}}>
-                    <List
-                        sx={{backgroundColor: color}}>
+                    <List sx={{backgroundColor: color}}>
                         {Object.values(CategoryEnum).map((item, index) =>
                             <LeftPanelListItem
                                 key={item}
@@ -42,7 +48,11 @@ const LeftPanel = () => {
                                 selectedIndex={selectedIndex}
                                 setSelectedIndex={setSelectedIndex}
                                 value={value}
-                                setValue={setValue}/>
+                                setValue={setValue}
+                                openAddSnackbar={openAddSnackbar}
+                                setOpenAddSnackbar={setOpenAddSnackbar}
+                                snackbarAddMessage={snackbarAddMessage}
+                                setSnackbarAddMessage={setSnackbarAddMessage}/>
                         )}
                     </List>
                     <div style={{backgroundColor: color, height: '100%'}}/>
@@ -53,7 +63,10 @@ const LeftPanel = () => {
                     columnDefs={columnDefs}
                     value={value}
                     setValue={setValue}
-                    />
+                    openAddSnackbar={openAddSnackbar}
+                    setOpenAddSnackbar={setOpenAddSnackbar}
+                    snackbarAddMessage={snackbarAddMessage}
+                    setSnackbarAddMessage={setSnackbarAddMessage}/>
                     : ''}
             </Box>
         </div>
