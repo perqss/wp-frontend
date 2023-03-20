@@ -150,7 +150,7 @@ const LeftPanelListItem = (props: {
     const handleClickAdd = () => {
         setAddFormOpen(true);
     };
-    console.log(props.value)
+    
     return (
         <div>
             <Dialog open={addFormOpen} onClose={() => setAddFormOpen(false)}>

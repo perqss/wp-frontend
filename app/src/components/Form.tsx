@@ -107,7 +107,6 @@ const Form = (props: {
 
   const handleInputChange = (e) => {
     let {name, value, checked, type} = e.target;
-    console.log(values)
 
     if (name === 'periodic') {
       value = checked;
@@ -122,7 +121,6 @@ const Form = (props: {
   };
 
   const generateErrorMessages = () => {
-    console.log(errors)
       return [...errors].map((error, id) =>
           <StyledAlert
               variant='filled'

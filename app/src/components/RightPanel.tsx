@@ -51,7 +51,6 @@ const RightPanel = (props: {
       setData(data);
       setColumnDefs(props.columnDefs);
       setIsShown(false);
-      console.log(props.value)
     })
   }, [props.query, props.value]);
 
@@ -81,8 +80,6 @@ const RightPanel = (props: {
     setDetails(selectedRows[0]);
     setIsShown(true);
   };
-
-  console.log(props.value)
 
   return (
     <div className='right-panel'>
