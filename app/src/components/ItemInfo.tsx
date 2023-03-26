@@ -8,7 +8,7 @@ import {Box, Button, Dialog, DialogTitle, Grid, IconButton, Paper, Tooltip, Typo
 import Logger from '../logger/Logger';
 import {ItemInfoButton} from './MaterialComponentsCss';
 import {CategoryEnum, Table} from './LeftPanel';
-import {deleteEmployee} from "../clients/EmployeesClient";
+import {deleteEmployee, fetchEmployeeHolidays} from "../clients/EmployeesClient";
 import {deleteTicket} from "../clients/TicketsClient";
 
 interface Holiday {
@@ -132,16 +132,15 @@ const ItemInfo = (props: {
 
     useEffect(() => {
         if (props.query === CategoryEnum.Employees) {
-            fetch(`${process.env.REACT_APP_URL}/employees/${props.details.employeeID}/holidays`)
-            .then(result => result.json())
-            .then(data => {
-                parseHolidays(data)
-                setHolidayData(data);
-                setHolidayColumnDefs([
-                    {field: 'dateFrom'},
-                    {field: 'dateTo'},
-                ]);
-            })
+            fetchEmployeeHolidays(props.details.employeeID)
+                .then(data => {
+                    parseHolidays(data as Holiday[])
+                    setHolidayData(data as Holiday[]);
+                    setHolidayColumnDefs([
+                        {field: 'dateFrom'},
+                        {field: 'dateTo'},
+                        ]);
+                })
         } else if (props.query === CategoryEnum.BusLines || props.query === CategoryEnum.TramLines) {
             setStopsData(parseStops(props.details.stops));
             setStopsColumnDefs([

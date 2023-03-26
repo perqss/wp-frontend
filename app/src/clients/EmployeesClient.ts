@@ -19,3 +19,8 @@ export const deleteEmployee = async (employeeId: number) => {
     const url: string = `${process.env.REACT_APP_URL}/employees/${employeeId}`;
     return doDelete(url);
 }
+
+export const fetchEmployeeHolidays = async (employeeId: number) => {
+    const url: string = `${process.env.REACT_APP_URL}/employees/${employeeId}/holidays`;
+    return doGet(url);
+}
