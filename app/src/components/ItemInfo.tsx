@@ -87,7 +87,7 @@ const ItemInfo = (props: {
         if (!stopsReversed.current) {
             stopsReversed.current = true;
             const stops = props.details.stops.slice().reverse();
-            setStopsData(parseStops(stops.reverse()));
+            setStopsData(parseStops(stops));
         }
     };
 
