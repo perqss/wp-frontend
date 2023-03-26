@@ -7,8 +7,7 @@ import Form from './Form';
 import {Box, Button, Dialog, DialogTitle, Grid, IconButton, Paper, Tooltip, Typography} from '@mui/material';
 import Logger from '../logger/Logger';
 import {ItemInfoButton} from './MaterialComponentsCss';
-import {CategoryEnum} from './LeftPanel';
-import {Table} from './LeftPanel';
+import {CategoryEnum, Table} from './LeftPanel';
 import {deleteEmployee} from "../clients/EmployeesClient";
 import {deleteTicket} from "../clients/TicketsClient";
 
@@ -59,10 +58,9 @@ const ItemInfo = (props: {
     const stopsReversed = useRef<boolean>(false);
     
     const parseStops = (stops: string[]) => {
-        let data = stops.map(stopName => {
+        return stops.map(stopName => {
             return {stopName}
         });
-        return data;
     };
 
     const parseHolidays = (holidays: Holiday[]) => {
@@ -163,7 +161,7 @@ const ItemInfo = (props: {
 
       const camelToTitle = (camelCaseWord: string) => {
         const wordsNotToChange = ['NO2', 'O3', 'PM10', 'PM25', 'SO2'];
-        const map = {'employeeID': 'Employee ID', 'departmentID': 'Department ID'};
+        const map = {'lineId': 'Line number'};
 
         if (camelCaseWord in map) {
             return map[camelCaseWord];
@@ -209,7 +207,9 @@ const ItemInfo = (props: {
                 spacing={3}
             >
                 {Object.keys(props.details).map(key => {
-                    if (key !== 'stops' && key !== 'repairHistory' && key !== 'no2' && key !== 'o3' && key !== 'pm10' && key !== 'pm25' && key !== 'so2') {
+                    const keysNotToInclude = ['stops', 'repairHistory', 'no2', 'o3', 'pm10', 'pm25', 'so2']
+                    const idRegex = new RegExp('([a-zA-Z])*[iI][dD]')
+                    if (!idRegex.test(key) && !keysNotToInclude.includes(key)) {
                         return (
                             <Grid
                                 item

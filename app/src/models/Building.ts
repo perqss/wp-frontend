@@ -1,10 +1,10 @@
 class Building {
-    buildingId: any;
+    buildingID: any;
     buildingName: string;
     address: string;
 
-    constructor(buildingId?: any, buildingName?: string, address?: string) {
-        this.buildingId = buildingId ?? 1;
+    constructor(buildingID?: any, buildingName?: string, address?: string) {
+        this.buildingID = buildingID ?? 1;
         this.buildingName = buildingName ?? '';
         this.address = address ?? '';
     }

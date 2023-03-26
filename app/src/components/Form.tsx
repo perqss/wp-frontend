@@ -59,7 +59,7 @@ const Form = (props: {
                     setErrors(responseErrors)
                 } else {
                     props.setOpenUpdateSnackbar?.(true);
-                    props.setSnackbarUpdateMessage?.(`Successfully updated ${props.query.substr(0, props.query.length - 1)}`);
+                    props.setSnackbarUpdateMessage?.(`Successfully updated ${props.query.substring(0, props.query.length - 1)}`);
                     props.setUpdateFormOpen?.(false);
                     props.setValue(props.value + 1);
                 }
@@ -73,7 +73,7 @@ const Form = (props: {
                     setErrors(responseErrors)
                 } else {
                     props.setOpenAddSnackbar?.(true);
-                    props.setSnackbarAddMessage?.(`Successfully added ${props.query.substr(0, props.query.length - 1)}`);
+                    props.setSnackbarAddMessage?.(`Successfully added ${props.query.substring(0, props.query.length - 1)}`);
                     props.setAddFormOpen?.(false);
                     props.setValue(props.value + 1);
                 }

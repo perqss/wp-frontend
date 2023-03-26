@@ -19,3 +19,9 @@ export function initPut(body?: string): RequestInit {
         body,
     };
 }
+
+export function initDelete() : RequestInit {
+    return {
+        method: 'DELETE'
+    };
+}

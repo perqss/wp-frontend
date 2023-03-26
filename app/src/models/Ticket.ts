@@ -1,11 +1,11 @@
 class Ticket {
-    tickedId: any;
+    tickedID: any;
     name: string;
     price: any;
     periodic: any;
 
-    constructor(ticketId?: any, name?: string, price?: any, periodic?: any) {
-        this.tickedId = ticketId ?? 1;
+    constructor(ticketID?: any, name?: string, price?: any, periodic?: any) {
+        this.tickedID = ticketID ?? 1;
         this.name = name ?? '';
         this.price = price ?? '';
         this.periodic = periodic ?? false;

@@ -1,4 +1,4 @@
-import {initPost, initPut} from "./ClientUtils";
+import {initDelete, initPost, initPut} from "./ClientUtils";
 
 const getResponseBody = async (fetchResponse: Response) => {
     let data: unknown;
@@ -23,5 +23,5 @@ export const doPut = async (url: string, request: any) => {
 }
 
 export const doDelete = async (url: string) => {
-    return getResponseBody(await fetch(url));
+    return getResponseBody(await fetch(url, initDelete()));
 }

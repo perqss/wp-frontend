@@ -3,7 +3,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import AddIcon from '@mui/icons-material/Add';
-import {Alert, Dialog, DialogTitle, IconButton, ListItemIcon, Snackbar, Tooltip} from '@mui/material';
+import {Dialog, DialogTitle, IconButton, ListItemIcon, Tooltip} from '@mui/material';
 import BadgeIcon from '@mui/icons-material/Badge';
 import AirIcon from '@mui/icons-material/Air';
 import ApartmentIcon from '@mui/icons-material/Apartment';
@@ -14,8 +14,7 @@ import DirectionsBusIcon from '@mui/icons-material/DirectionsBus';
 import AirlineStopsIcon from '@mui/icons-material/AirlineStops';
 import Form from './Form';
 import Logger from '../logger/Logger';
-import {CategoryEnum} from "./LeftPanel";
-import {Table} from './LeftPanel';
+import {CategoryEnum, Table} from "./LeftPanel";
 
 const LeftPanelListItem = (props: {
         key: string, 
@@ -189,7 +188,7 @@ const LeftPanelListItem = (props: {
                 </ListItemButton>
                 {addableFields.includes(props.text) &&
                     <Tooltip
-                        title={`Add new ${props.text.toLowerCase().substr(0, props.text.length - 1)} to database`}
+                        title={`Add new ${props.text.toLowerCase().substring(0, props.text.length - 1)} to database`}
                         placement='right'
                     >
                         <IconButton
@@ -200,19 +199,6 @@ const LeftPanelListItem = (props: {
                     </Tooltip>
                 }  
             </ListItem>
-            {/* <Snackbar
-                open={props.openAddSnackbar}
-                autoHideDuration={2000}
-                onClose={() => props.setOpenAddSnackbar(false)}
-            >
-                <Alert
-                    onClose={() => props.setOpenAddSnackbar(false)}
-                    severity='success'
-                    variant='filled'
-                >
-                    {props.snackbarAddMessage}
-                </Alert>
-            </Snackbar> */}
         </div>
     );
 }
