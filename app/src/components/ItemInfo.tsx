@@ -206,7 +206,7 @@ const ItemInfo = (props: {
                 spacing={3}
             >
                 {Object.keys(props.details).map(key => {
-                    const keysNotToInclude = ['stops', 'repairHistory', 'no2', 'o3', 'pm10', 'pm25', 'so2']
+                    const keysNotToInclude = ['stops', 'repairHistory'];
                     const idRegex = new RegExp('([a-zA-Z])*[iI][dD]')
                     if (!idRegex.test(key) && !keysNotToInclude.includes(key)) {
                         return (
