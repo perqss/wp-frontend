@@ -177,7 +177,7 @@ const LeftPanelListItem = (props: {
                         },
                         ':hover': {
                             backgroundColor: leftPanelColor,
-                        }
+                        },
                     }}
                 >
                     {renderIcons()}
@@ -193,8 +193,13 @@ const LeftPanelListItem = (props: {
                     >
                         <IconButton
                             onClick={handleClickAdd}
+                            sx={{
+                                ':hover': {
+                                    backgroundColor: leftPanelColor,
+                                }
+                            }}
                         >
-                                <AddIcon sx={{color: 'white'}}/>
+                            <AddIcon sx={{color: 'white'}}/>
                         </IconButton>
                     </Tooltip>
                 }  

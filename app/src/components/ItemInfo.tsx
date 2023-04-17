@@ -4,12 +4,13 @@ import {AgGridReact} from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-material.css';
 import Form from './Form';
-import {Box, Button, Dialog, DialogTitle, Grid, IconButton, Paper, Tooltip, Typography} from '@mui/material';
+import {Box, Button, Dialog, DialogTitle, Grid, IconButton, Paper, Tooltip, Typography, Card, CardContent} from '@mui/material';
 import Logger from '../logger/Logger';
 import {ItemInfoButton} from './MaterialComponentsCss';
 import {CategoryEnum, Table} from './LeftPanel';
 import {deleteEmployee, fetchEmployeeHolidays} from "../clients/EmployeesClient";
 import {deleteTicket} from "../clients/TicketsClient";
+
 
 interface Holiday {
     employeeId: number;
@@ -207,19 +208,25 @@ const ItemInfo = (props: {
             >
                 {Object.keys(props.details).map(key => {
                     const keysNotToInclude = ['stops', 'repairHistory'];
-                    const idRegex = new RegExp('([a-zA-Z])*[iI][dD]')
+                    const idRegex = new RegExp('([a-zA-Z])*[iI][dD]');
                     if (!idRegex.test(key) && !keysNotToInclude.includes(key)) {
                         return (
                             <Grid
                                 item
                                 key={key}
                             >
-                                <Paper
-                                    elevation={1}
+                                <Card
                                     key={key}
                                 >
-                                    {camelToTitle(key)}: {parseObjectValue(`${props.details[key]}`)}
-                                </Paper>
+                                    <CardContent>
+                                        <Typography gutterBottom variant='subtitle1' color='text.secondary'>
+                                            {camelToTitle(key)}
+                                        </Typography>
+                                        <Typography variant='body1' mt={2}>
+                                            {parseObjectValue(`${props.details[key]}`)}
+                                        </Typography>
+                                    </CardContent>
+                                </Card>
                             </Grid>
                         );
                     }
